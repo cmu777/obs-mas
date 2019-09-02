@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="html.css" />
+    <title>JAS Download</title>
+  </head>
+  <body class="main">
+    <h1>Download, installation and unit tests</h1>
+
+
+<h2>Download jar-files or clone repository</h2>
+
+<ul>
+<li><p>This is JAS version: <strong>jas-2.5</strong>, 
+    subversion revision: <strong>4873</strong> (export at 2014-08-16).
+    </p>
+</li>
+<li><p>The JAS classes jar-file 
+    <a href="jas-2.5.4873-bin.jar">jas-2.5.4873-bin.jar</a>
+    can be used the same way as any other Java archive during 
+    compilation and execution of your Java programs. 
+    It is compiled using Java 7 from OpenJDK (IcedTea7).
+    The bytecode is dual licenced also under the Apache 2.0 licence 
+    to allow usage in Android projects.
+    <br />
+    The source code is in 
+    <a href="jas-2.5.4873-src.zip">jas-2.5.4873-src.zip</a> 
+    current version should compile on Java 1.6 and 1.7 (aka Java 6 and 7).  
+    (right click on the link and chose "save link as")
+    <br />
+    The Javadoc API documentation is in 
+    <a href="jas-2.5.4873-doc.zip">jas-2.5.4873-doc.zip</a> 
+    for current version.
+    </p>
+</li>
+<li><p>The JAS Git repository is available with
+    </p>
+    <pre>
+ git clone http://krum.rz.uni-mannheim.de/jas.git  jas
+</pre>
+</li>
+<li><p>Required libraries: 
+    <br />
+    <a href="../lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
+    <br />
+    <a href="../lib/junit.jar">lib/junit.jar</a> (from Junit),
+    <br />
+    In case you have the first two ones, just ensure they are in the 
+    correct location (e.g. <code>../lib/</code>) or they are in the class path.
+    </p>
+    <p>
+    In case you can not use Apache log4j for some reason, there is an 
+    adaptor package <a href="mylog.jar">mylog.jar</a> 
+    which delegates all logging calls to native Java logging.
+    For Android there is the adaptor package <a href="droidlog.jar">droidlog.jar</a> 
+    which delegates all logging calls to native Android logging.
+    </p>
+</li>
+<li><p>Optional libraries and files: 
+    </p>
+    <ul>
+    <li>Android JAS App 
+        <a href="http://krum.rz.uni-mannheim.de/ruboto-irb-jas-release.apk">Ruboto-IRB_with_JAS</a>.
+        <br />
+        You must allow &quot;installation from untrusted sources&quot;.
+        <br />
+        The JAS App uses its JRuby scripting interface and runs within the Ruby IRB Android App 
+        <a href="http://ruboto.org/">Ruboto</a>.
+    </li>
+    <li>A Debian package <a href="http://packages.debian.org/de/sid/libjas-java" target="deb">libjas-java</a> 
+        and an 
+        <br />
+        Ubuntu package 
+        <a href="http://packages.ubuntu.com/search?keywords=libjas-java" target="deb">libjas-java</a>
+        is also avalilable.
+    </li>
+    <li><a href="jas-mpj.jar">jas-mpj.jar</a> <br /> This JAR contains
+        implementations of distributed Gr&ouml;bner bases using the 
+        MPJ middle-ware (MPI Java). It requires an MPJ implementation such as 
+        <a href="http://mpj-express.org/" target="mpj" >MPJ Express</a> or 
+        <a href="http://fastmpj.com/" target="mpj" >FastMPJ</a>. 
+        <br />
+        The Javadocs can be found <a href="doc/mpj/index.html" target="api">here</a>.
+    </li>
+    <li><a href="jas-mpi.jar">jas-mpi.jar</a> <br /> This JAR contains
+        implementations of distributed Gr&ouml;bner bases using the 
+        Open-MPI middle-ware (with Java support). It requires an MPI implementation 
+        such as <a href="http://www.open-mpi.org/" target="mpi" >Open-MPI</a>.
+        <br />
+        The Javadocs can be found <a href="doc/mpi/index.html" target="api">here</a>.
+    </li>
+    <li><a href="jas-meditor.jar">jas-meditor.jar</a> 
+        <br />
+        This JAR contains the interface for JAS as an meditor engine,
+        see <a href="http://jscl-meditor.sourceforge.net/" target="rela">jscl-meditor</a>.
+        <br />
+        Sample script to call meditor with the JAS engine 
+        <a href="meditor/meditor">meditor</a>. 
+    </li>
+    <li><a href="jlinalg_adapter.jar">jlinalg_adapter.jar</a> 
+        <br />
+        This JAR contains an adapter for JAS to the linear algebra library
+        <a href="http://jlinalg.sourceforge.net/" target="rela">JLinAlg</a> version 0.6. 
+        <br />
+        The Javadocs can be found <a href="doc/jlinalg_adapter/index.html" target="api">here</a>.
+    </li>
+    <li><a href="commons-math_adapter.jar">commons-math_adapter.jar</a> 
+        <br />
+        This JAR contains an adapter for JAS to the Apache Commons Math 2.0 
+        linear algebra library
+        <a href="http://commons.apache.org/math/" target="rela">Commons-Math</a> 
+        version 2.0. 
+    </li>
+    <li><a href="jas-jython.jar">jas-jython.jar</a> 
+        <br />
+        This JAR contains a scripting interface to use the 
+        <a href="http://www.jython.org/" target="rela">jython</a> 
+        interpreter with JAS.
+    </li>
+    </ul>
+    <p>&nbsp;</p>
+</li>
+<li><p>For latest developments see <a href="jas-log.html">JAS Weblog</a> 
+    and the <a href="svn_change.log" target="top">Subversion change log</a>.
+    </p>
+</li>
+</ul>
+
+
+<h2>Installation</h2>
+
+<ul>
+<li><p>Add the JAS jar-file and the other required jar-files 
+     to the classpath. Start using it in your applications.
+     For example
+    </p>
+<pre>
+javac -classpath log4j.jar:junit.jar:jas.jar:. -d . src/edu/jas/gb/Examples.java
+
+java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.gb.Examples
+</pre>
+</li>
+<li><p>If you want to develop with JAS, then extract the 
+     jar-file in a new directory
+     <code>jar -xvf jas-[version]-src.jar</code>
+    </p>
+</li>
+<li><p>JAS is currently developed for Java 7 (OpenJDK 1.7).
+    It will compile also under Java 6 (OpenJDK 1.6). 
+    It will <b>no more</b> compile under Java 5 or older versions. 
+    </p>
+</li>
+<li><p>Among the extracted files, there is an Ant build script
+    <code>build.xml</code>
+    and also a Gnu make file
+    <code>Makefile</code>.
+    <br />
+    To use Ant, you must edit the <code>build.xml</code> file and
+    adjust the <code>lib</code> property to point to the directory 
+    where you downloaded the jar files.
+    Also be sure to use the correct JDK version, e.g. via setting the     
+    <code>JAVA_HOME</code> environment variable.
+    <br />
+    To use the Gnu make file, you must edit the <code>Makefile</code>
+    and adjust the <code>JDK</code> and the <code>LIBPATH</code> variables.
+    </p>
+</li>
+<li><p>Most useful Ant targets:
+    <br />
+    <code>ant compile</code> changed Java files are compiled,
+    <br />
+    <code>ant recompile</code> all Java files are compiled,
+    <br />
+    <code>ant test</code> run all JUnit tests,
+    <br />
+    <code>ant clean</code> remove backup files,
+    <br />
+    <code>ant distclean</code> remove all class files,
+    <br />
+    <code>ant doc</code> create the Javadocs.
+    </p>
+</li>
+<li><p>Most useful make file targets:
+    <br />
+    <code>make "class"</code> run the <code>main()</code> method of the class,
+    <br />
+    e.g. <code>make edu.jas.poly.Examples</code> run 
+    the class <code>Examples</code>.
+    </p>
+</li>
+</ul>
+
+
+<h2>Unit tests with JUnit</h2>
+<ul>
+<li><p>Unit tests can be run with the "test" target for ant, e.g. 
+    <code>ant test</code>
+    </p>
+</li>
+<li><p>The output of the unit tests is collected in the directory 
+    <code>test</code> for inspection.
+    </p>
+</li>
+<li><p>The test units work mainly with generated random polynomials.
+    The parameters are choosen such that the resulting Groebner bases 
+    are not to hard to compute.
+    However some random polynomials may be to big and the running time
+    may occasionally be several minutes (but not hours).
+    <br />
+    On the other hand random polynomials may sometimes be zero or one.
+    If such input does not make sense the test will fail. I.e. some
+    tests will fail from time to time, but not for repeated execution 
+    of the test. So if a test fails rerun the test a few times.
+    </p>
+</li>
+</ul>
+
+
+<h2><a name="docu">Documentation</a></h2>
+
+<ul>
+<li><p>The JAS documentation is contained in the jar files 
+    <code>jas-[version]-src.jar</code> and <code>jas-[version]-doc.jar</code>. 
+    Extract the jar files and start exploring with any browser
+    from the <code>index.html</code> file in the main directory.
+    </p>
+</li>
+<li><p>The JAS javadoc API documents and the jython documents 
+    can also be browsed online:  
+    <a href="doc/api/index.html" target="api">API Javadocs</a>, 
+    <a href="doc/jython/index.html" target="jython">Epydoc of jas.py</a> and
+    <a href="doc/jruby/index.html" target="jruby">Rdoc of jas.rb</a>.
+    </p>
+</li>
+<li><p><a href="README" target="main" >README</a> and licencing: 
+    <a href="COPYING.jas" target="gpl" >COPYING.jas</a> (GPL)
+    or 
+    <a href="COPYING.lgpl.jas" target="gpl" >COPYING.lgpl.jas</a> (LGPL)
+</p>
+</li>
+</ul>
+
+
+<h2><a name="eclipse">Usage</a> with the Eclipse IDE</h2>
+
+<p>The JAS source distribution can also be compiled and used from the 
+Eclipse integrated development environment.
+</p>
+
+<p>Instructions to install the JAS source:</p>
+<ol>
+<li>Download the JAS source jar and unpack to some directory 
+</li>
+<li>Download the Log4j and the Junit jar files
+</li>
+<li>Start eclipse
+</li>
+<li>Create a new project from "existing source"
+</li>
+<li>Specify the plain source directory <code>/src</code> from 1.
+</li>
+<li>Add the jars from 2. to the project libraries as "external JARs"
+</li>
+<li>Create a new project or use your default project
+</li>
+<li>In the project properties add as "required project" 
+    the JAS project from 4.
+</li>
+</ol>
+
+<p>Instructions to install the JAS binary:</p>
+<ol>
+<li>Download the JAS binary jar file
+</li>
+<li>Download the Log4j and the Junit jar files
+</li>
+<li>Start eclipse
+</li>
+<li>In your projects properties add the jar files 
+    from 1. and 2. to the project libraries as "external JARs"
+</li>
+</ol>
+
+
+<p>Create and edit a sample java programm which uses the JAS API. 
+   E.g. the following sample computes the first ten Legendre polynomials.
+</p>
+<pre>
+import java.util.List;
+import java.util.ArrayList;
+
+import edu.jas.arith.BigRational;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+
+public class mytests {
+
+    public static void main(String[] args) {
+         BigRational fac = new BigRational();
+         String[] var = new String[]{ "x" };
+         GenPolynomialRing&lt;BigRational&gt; ring
+             = new GenPolynomialRing&lt;BigRational&gt;(fac,1,var);
+
+         int n = 10;
+         List&lt;GenPolynomial&lt;BigRational&gt;&gt; P 
+             = new ArrayList&lt;GenPolynomial&lt;BigRational&gt;&gt;(n);
+         GenPolynomial&lt;BigRational&gt; t, one, x, xc;
+         BigRational n21, nn;
+
+         one = ring.getONE();
+         x   = ring.univariate(0);
+
+         P.add( one );
+         P.add( x );
+         for ( int i = 2; i &lt; n; i++ ) {
+             n21 = new BigRational( 2*i-1 );
+             xc = x.multiply( n21 );
+             t = xc.multiply( P.get(i-1) );  // (2n-1) x P[n-1]
+             nn = new BigRational( i-1 );
+             xc = P.get(i-2).multiply( nn ); // (n-1) P[n-2]
+             t = t.subtract( xc );
+             nn = new BigRational(1,i);      
+             t = t.multiply( nn );           // 1/n t
+             P.add( t );
+         }
+         for ( int i = 0; i &lt; n; i++ ) {
+             System.out.println("P["+i+"] = " + P.get(i) );
+         }
+    }
+}
+</pre>
+
+
+<h2>Using the <a name="jython">Jython</a> interpreter</h2>
+
+<ul>
+<!--li><p>Set up your <code>.jythonrc</code> file, e.g. see the sample code in
+    <a href="sample.jythonrc" target="py">sample.jythonrc</a>.
+    </p>
+</li-->
+<li><p>Be sure you have downloaded the above libraries 
+    log4j.jar, junit.jar and jas*-bin.jar. 
+    JAS-2.5 is using and has been tested with Jython 2.5.2. 
+    </p>
+</li>
+<li><p>The main file to interface to the JAS library is  
+    <a href="examples/jas.py" target="py">jas.py</a>.
+    It must be imported by other Python files.
+    HTML documents of the interface can be found 
+    <a href="doc/jython/index.html" target="jython">here</a>.
+    </p>
+</li>
+<!--li><p>If jython cannot find the JAS classes, try to put the jas.jar also 
+    into the CLASSPATH or unpack the jar into the directory you are 
+    starting jython (also to get the correct version of .py files).
+    </p>
+</li-->
+<li><p>Start using JAS, e.g.
+    </p>
+    <pre>jython -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.py</pre>
+    <p>The 
+    <a href="examples/trinks.py" target="py">examples/trinks.py</a>
+    contains an Groebner base example named after its proposer Mr. Trinks.
+    The file runs a sequential, a parallel and a distributed version
+    of the Groebner base algorithms.
+    </p>
+</li>
+<li><p>For further discussion of the JAS jython interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
+
+<h2>Using the <a name="jruby">JRuby</a> interpreter</h2>
+
+<ul>
+<li><p>Be sure you have downloaded the above libraries 
+    log4j.jar, junit.jar and jas*-bin.jar.
+    JAS-2.5 is using and has been tested with JRuby 1.7.3 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
+    </p>
+</li>
+<li><p>The main file to interface to the JAS library is  
+    <a href="examples/jas.rb" target="rb">jas.rb</a>.
+    It must be required by other Ruby files.
+    HTML documents of the interface can be found 
+    <a href="doc/jruby/index.html" target="jruby">here</a>.
+    </p>
+</li>
+<li><p>Start using JAS, e.g.
+    </p>
+    <pre>jruby -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.rb</pre>
+    <p>The 
+    <a href="examples/trinks.rb" target="rb">examples/trinks.rb</a>
+    contains an Groebner base example named after its proposer Mr. Trinks.
+    The file runs a sequential, a parallel and a distributed version
+    of the Groebner base algorithms.
+    </p>
+</li>
+<li><p>For further discussion of the JAS scripting interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
+
+<h2>Using the <a name="ruboto-irb-jas">Ruboto-IRB-JAS</a> Android application</h2>
+
+<ul>
+<li><p>Be sure you have installed the above Android application package  
+    <code>ruboto-irb-jas-release.apk</code>. 
+    It contains all required libraries and scripts. 
+    JAS-2.5 has been tested with Android 2.3 and 4.1 and is using 
+    JRuby 1.6.4 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
+    </p>
+</li>
+<li><p>The JAS app uses the Ruby IRB <a href="http://ruboto.org/">Ruboto</a> for Android.
+    This is just a Ruby interpreter running on Android together with a text editor. 
+    So all JAS JRuby scripts can be run in this environment. 
+    The JAS Java programs are included in compiled and transformed Dalvik "dex" format.
+    Up to now, no functional problems have been encountered, i.e. all JAS Java code runs.
+    However, due to limitations in CPU speed and memory on mobile phones or tablets 
+    eventually not all examples and problems will execute. 
+    In 2012, comparison of a two year old Android tablet (1 GHz, 0.5 GB)
+    and a three year old PC (3 GHz, 4 GB) show that the examples run 
+    about 5 times slower than on the PC.
+    </p>
+</li>
+<li><p>The main Ruboto screen with the "trinks.rb" example and its output looks as follows.
+       Also the arbitrary precision numbers arithmetic works on Android.
+    </p>
+    <p><a href="images/device-2012-11-18-jas-trinks.png" ><img src="images/device-2012-11-18-jas-trinks-thumb.png" alt="screen shot" /></a> &nbsp;
+       <a href="images/device-2012-11-18-jas-trinks-out.png" ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" alt="screen shot"/></a> &nbsp;
+       <a href="images/device-2012-11-18-jas-trinks-out-big.png" ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" alt="screen shot"/></a>
+    </p>
+    <p>The list of examples can be accessed via the "scripts" button. 
+    </p>
+    <p><a href="images/device-2012-11-18-jas-examples.png" ><img src="images/device-2012-11-18-jas-examples-thumb.png" alt="screen shot"/></a> 
+    </p>
+</li>
+<li><p>For further discussion of the JAS scripting interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
+    <hr />
+<address><a name="contact" 
+            href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a>
+</address>
+<p>
+<!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
+<!-- hhmts start -->
+Last modified: Sat Aug 16 09:30:44 CEST 2014
+<!-- hhmts end -->
+</p>
+<!--p align="right" >
+$Id: download.html 4872 2014-08-16 09:45:10Z kredel $
+<li><p>
+
+    </p>
+</li>
+<li><p>
+
+    </p>
+</li>
+</p-->
+  </body>
+</html>

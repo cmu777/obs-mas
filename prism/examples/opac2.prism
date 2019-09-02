@@ -1,0 +1,22 @@
+ldtmc
+
+//define the transition label and its observation, null denotes hidden
+observations
+	a->a, b->null, c->c, x->null
+endobservations
+
+label "terminating" = (t=1);
+
+module opac1
+
+	s : [0..5] init 0;
+	t : [0..1] init 0; // t=1 denote terminate state
+
+	[] (s=0)&(t=0) -> 1:a:(s'=1);
+	[] (s=1)&(t=0) -> 1/3:c:(s'=2) + 2/3:b:(s'=3);
+	[] (s=2)&(t=0) -> 1/2:b:(s'=s) + 1/2:a:(s'=4);
+	[] (s=3)&(t=0) -> 1:a:(s'=5);
+	[] (s=4)&(t=0) -> 1:x:(s'=s)&(t'=1);
+	[] (s=5)&(t=0) -> 1:c:(s'=s)&(t'=1);
+
+endmodule

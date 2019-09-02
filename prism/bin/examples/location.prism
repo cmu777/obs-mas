@@ -1,0 +1,26 @@
+ldtmc
+
+//define the transition label and its observation, null denotes hidden
+observations
+	station->s, work->null, travel->null, office->o,
+	bankA->b, bankB->b, coffeshop->c, airport->a,
+	home->null, L1->null, L2->null, L3->null
+endobservations
+
+label "dest" = (location=9 | location=10 | location=11) & (t=1);
+
+module opac1
+
+	location : [0..11] init 0;
+	t : [0..1] init 0; // t=1 denote terminate state
+
+	[] (location=0)&(t=0) -> 1:station:(location'=1);
+	[] (location=1)&(t=0) -> 1/2:work:(location'=2) + 1/2:travel:(location'=3);
+	[] (location=2)&(t=0) -> 2/3:office:(location'=location) + 1/6:coffeshop:(location'=5) + 1/6:bankA:(location'=4);
+	[] (location=3)&(t=0) -> 1:bankB:(location'=7);
+	[] (location=4)&(t=0) -> 1:home:(location'=6)&(t'=1);
+	[] (location=5)&(t=0) -> 1:office:(location'=2) ;
+	[] (location=7)&(t=0) -> 2/3:airport:(location'=8) + 1/3:L3:(location'=9) & (t'=1);
+	[] (location=8)&(t=0) -> 1/2:L1:(location'=10) & (t'=1) + 1/2:L2:(location'=11) & (t'=1);
+
+endmodule

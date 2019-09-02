@@ -1,0 +1,201 @@
+List of things to be resolved or accomplished:
+
+issues to consider:
+
+- implement Berlekamp-Zassenhaus for modular factorization
+
+- implement IDEALDIV2 with extGB
+
+- implement Musers multivariate factorization, evtl. with sparse Hensel lifting
+
+- implement real roots with other methods, e.g. after Uspensky or Rolle
+
+- implement complex roots with other methods, e.g. after Collins and Krandick
+
+- implement involutive bases computation
+
+- implement signature based GB computation
+
+- make hashCode to reuse computed value --> not immutable
+
+- use further util.concurrent algorithms where possible, e.g. in DHT
+
+- make polynomial chinese remainder generic (?)
+
+- test caching results of gcd computation
+
+- refactor BigDecimal to RingElem and RingFactory, make precision variable
+
+- refactor from BasicLinAlg to GenMatrix and GenVector 
+
+- implement univariate power series composition and power
+
+- add method bitLength() to Element
+
+- make final variables public (?)
+
+- define quotientRemainder in RingElem interface (?)
+
+- remove unnecessary @see since JavaDoc 7 
+
+- make use of gcd in pseudo reduction, needs other coefficient type
+
+- implement matrices to vector
+
+- implement Boolean with RingElem interface (?)
+
+- check solvable polynomials with integral domain coefficients
+
+- refactor method names for groovy operator overloading, make examples for usage
+
+- check usage SDP (Socked Direct Protokol) with Java 7 and InfiniBand
+
+- algebraic number theory
+
+- algebraic topology
+
+- group theory, permutation groups
+
+
+
+partially resolved and completed issues:
+
+- provide all Jython examples also for JRuby
+
+- implement multivariate Hensel lifting for multivariate polynomial factorization
+
+- implement 0-dim ideal complex root selection
+
+- refactor package structure to reduce circular dependences
+
+- implement parallel proxys for GB computation
+
+- rework parallel GB algorithms
+
+- implement FGLM GB algorithm
+
+- implement other term orders for multivariate power series
+
+- check the 693 exceptions (including 473 runtime exceptions) that are thrown, 
+  reduce number of runtime exceptions
+
+- check for safe publication in constructors, check wrt. the (new) Java memory model
+
+- check and fix Findbugs warnings
+
+- implement squarefree decomposition over fields of characteristic p
+
+- implement absolute polynomial factorization
+
+- implement univaiate and multivariate polynomial factorization
+
+- let arith implementations extend Power as abstract class
+  add divide, subtract, abs, remainder to Power, 
+  name e.g RingElemAbstract
+  clean structure of compareTo, signum and equals
+  - is not possible
+
+- define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
+  and classes, done
+
+- add product category to applications
+- implement direct products of ring elements
+
+- define FieldElem and Field factory interfaces and use them for GB coefficients
+
+- refactor Hensel lifting to ufd package, not possible because of 
+  coefficient replacement trick
+  !must be done some how!
+
+- check correct term order in recursive algorithms,
+  in GCD ModEval only univariate cases are used, so term order is not a problem
+
+- add assertions to check for number of polynomial variables and term order,
+  nvar in GenPolynomial and GenSolvablePolynomial done
+
+
+
+resolved and completed issues:
+
+- refactor unit tests to a different source code tree to avoid circular dependencys
+
+- implement AlgebraicNumber primitive element computation, done
+
+- implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
+
+- implement prime and primary ideal decomposition for zero-dimensional ideals, done
+
+- implement multivariate power series, done
+
+- implement univariate power series, done
+
+- develop modifiable polynomial constructor or put method and iterators
+
+- rework junit tests to stop failing in case of zero polynomials
+
+- using git to publish the repository, done
+
+- rename divideAndRemainder to quotientRemainder
+
+- refactor the Quotient class to edu.jas.ufd package, done
+
+- implement d- and e-reductions and d-/e-Groebner bases, done
+
+- implement Groebner bases for regular rings, done
+
+- implement comprehensive GB, done
+
+- implement term order optimization from MAS, also for coefficients 
+  and solvable polynomials, done
+
+- implement complex roots, done
+
+- implement ModLong for faster modular arithmetic, done
+
+- implement construction of univariate polynomials in zero-dimensional ideals
+  done
+
+- implement a global variable name generator in edu.jas.kern
+  and use it in extend() and contract()
+  done in GenPolynomialRing
+
+- implement RealAlgebraicNumber and RealAlgebraicNumberRing, done
+
+- implement real roots with Sturm sequence, done
+
+- refactor univPoly in solvable implementations, done
+
+- add missing comments in edu.jas.Algebra*, done
+
+- let inverse() throw a runtime exception, done; throw a checked exception (?, no)
+
+- split ModInteger to ModIntegerRing factory, done
+
+- make logger variables also final, done
+
+- rename getval() to getVal() in ExpVector, done
+
+- refactor ExpVector for different array element types, done
+
+- incorporate gcd() in the Quotient class in edu.jas.application
+
+- implement BigDecimal with RingElem interface, done
+
+- make examples with rational function field coefficients, 
+  e.g. Raksanyi example
+
+- replace thread-and-network-programming algorithms with 
+  util.concurrent, done
+
+- implement multivariate polynomial greatest common divisors, done
+
+- add methods to GenPolynomialRing to construct x_i polynomials, done
+
+- add version information in jas jar-file names, done
+
+- split RingFactory to ElemFactory, done
+
+- split AlgebraicNumber to AlgebraicNumberRing factory, done
+
+
+$Id: TODO 4689 2013-11-03 22:54:37Z kredel $

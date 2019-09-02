@@ -1,0 +1,17 @@
+ldtmc
+
+observations
+	a->a, b->b, c->c
+endobservations
+
+module loop
+
+	s:[0..5] init 0;
+	t:[0..1] init 0;
+
+	[] (s=0) & (t=0) -> 1:a:(s'=1);
+	[] (s=1) & (t=0) -> 1/2:b:(s'=2) + 1/2:c:(s'=4)&(t'=1);
+	[] (s=2) & (t=0) -> 1/2:a:(s'=s) + 1/2:c:(s'=3);
+	[] (s=3) & (t=0) -> 1:a:(s'=1);
+
+endmodule

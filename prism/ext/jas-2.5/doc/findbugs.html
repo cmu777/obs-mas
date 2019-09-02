@@ -1,0 +1,691 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FindBugs Report</title>
+<style type="text/css">
+		.tablerow0 {
+			background: #EEEEEE;
+		}
+
+		.tablerow1 {
+			background: white;
+		}
+
+		.detailrow0 {
+			background: #EEEEEE;
+		}
+
+		.detailrow1 {
+			background: white;
+		}
+
+		.tableheader {
+			background: #b9b9fe;
+			font-size: larger;
+		}
+
+		.tablerow0:hover, .tablerow1:hover {
+			background: #aaffaa;
+		}
+
+		.priority-1 {
+		    color: red;
+		    font-weight: bold;
+		}
+		.priority-2 {
+		    color: orange;
+		    font-weight: bold;
+		}
+		.priority-3 {
+		    color: green;
+		    font-weight: bold;
+		}
+		.priority-4 {
+		    color: blue;
+		    font-weight: bold;
+		}
+		</style>
+<script type="text/javascript">
+			function toggleRow(elid) {
+				if (document.getElementById) {
+					element = document.getElementById(elid);
+					if (element) {
+						if (element.style.display == 'none') {
+							element.style.display = 'block';
+							//window.status = 'Toggle on!';
+						} else {
+							element.style.display = 'none';
+							//window.status = 'Toggle off!';
+						}
+					}
+				}
+			}
+		</script>
+</head>
+<body>
+<h1>
+<a href="http://findbugs.sourceforge.net">FindBugs</a> Report</h1>
+<h2>Project Information</h2>
+<p>Project: 
+		</p>
+<p>FindBugs version: 2.0.1-rc3</p>
+<p>Code analyzed:</p>
+<ul>
+<li>/home/kredel/jas/edu/jas/</li>
+</ul>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Metrics</h2>
+<p>91274 lines of code analyzed,
+	in 873 classes, 
+	in 15 packages.</p>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Metric</th>
+<th align="right">Total</th>
+<th align="right">Density*</th>
+</tr>
+<tr class="tablerow0">
+<td>High Priority Warnings</td>
+<td align="right">1</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="tablerow1">
+<td>Medium Priority Warnings</td>
+<td align="right">24</td>
+<td align="right">0.26</td>
+</tr>
+<tr class="$totalClass">
+<td>
+<b>Total Warnings</b>
+</td>
+<td align="right">
+<b>25</b>
+</td>
+<td align="right">
+<b>0.27</b>
+</td>
+</tr>
+</table>
+<p>
+<i>(* Defects per Thousand lines of non-commenting source statements)</i>
+</p>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Contents</h2>
+<ul>
+<li>
+<a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</li>
+<li>
+<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
+</li>
+<li>
+<a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</li>
+<li>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
+</li>
+<li>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</li>
+<li>
+<a href="#Details">Details</a>
+</li>
+</ul>
+<h1>Summary</h1>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Warning Type</th>
+<th align="right">Number</th>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</td>
+<td align="right">17</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
+</td>
+<td align="right">1</td>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</td>
+<td align="right">1</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
+</td>
+<td align="right">2</td>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</td>
+<td align="right">4</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<b>Total</b>
+</td>
+<td align="right">
+<b>25</b>
+</td>
+</tr>
+</table>
+<h1>Warnings</h1>
+<p>Click on a warning row to see full context information.</p>
+<h2>
+<a name="Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65548');">
+<td>
+<span class="priority-1">Nm</span>
+</td>
+<td>The class name edu.jas.application.FactorFactory shadows the simple name of the superclass edu.jas.ufd.FactorFactory</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65548" style="display: none;">
+<a href="#NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">Bug type NM_SAME_SIMPLE_NAME_AS_SUPERCLASS (click for details)</a>
+<br/>In class edu.jas.application.FactorFactory<br/>In class edu.jas.ufd.FactorFactory<br/>At FactorFactory.java:[lines 65-209]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66263');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial) negates the return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66263" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.PolynomialComparator<br/>In method edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial)<br/>Called method edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>Return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>At PolynomialComparator.java:[line 51]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66401');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66401" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder$69<br/>In method edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>At TermOrder.java:[line 1269]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66478');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66478" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder$9<br/>In method edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>At TermOrder.java:[line 249]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66555');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.Word.gradInvlexCompareTo(Word) negates the return value of edu.jas.poly.Word.compareTo(Word)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66555" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.Word<br/>In method edu.jas.poly.Word.gradInvlexCompareTo(Word)<br/>Called method edu.jas.poly.Word.compareTo(Word)<br/>Return value of edu.jas.poly.Word.compareTo(Word)<br/>At Word.java:[line 452]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65658');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GBProxy is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65658" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GBProxy<br/>At GBProxy.java:[lines 27-160]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65693');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributed is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65693" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>At GroebnerBaseDistributed.java:[lines 41-371]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65728');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedEC is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65728" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedEC<br/>At GroebnerBaseDistributedEC.java:[lines 41-444]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65763');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybrid is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65763" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>At GroebnerBaseDistributedHybrid.java:[lines 42-462]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65798');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybridEC is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65798" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybridEC<br/>At GroebnerBaseDistributedHybridEC.java:[lines 43-527]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65833');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65833" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 36-297]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65868');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseSeqPairDistributed is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65868" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>At GroebnerBaseSeqPairDistributed.java:[lines 42-381]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65903');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65903" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairParallel<br/>At GroebnerBaseSeqPairParallel.java:[lines 35-265]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65991');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.SolvableGroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65991" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.SolvableGroebnerBaseParallel<br/>At SolvableGroebnerBaseParallel.java:[lines 33-370]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66026');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.SolvableGroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66026" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.SolvableGroebnerBaseSeqPairParallel<br/>At SolvableGroebnerBaseSeqPairParallel.java:[lines 37-338]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66061');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gbufd.GroebnerBasePseudoParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66061" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gbufd.GroebnerBasePseudoParallel<br/>At GroebnerBasePseudoParallel.java:[lines 42-303]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66700');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.ufd.GCDProxy is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66700" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.ufd.GCDProxy<br/>At GCDProxy.java:[lines 29-582]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_CORRECTNESS">Correctness Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66640');">
+<td>
+<span class="priority-2">SA</span>
+</td>
+<td>Self comparison of $L0 with itself edu.jas.ps.Examples.example11()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66640" style="display: none;">
+<a href="#SA_LOCAL_SELF_COMPARISON">Bug type SA_LOCAL_SELF_COMPARISON (click for details)</a>
+<br/>In class edu.jas.ps.Examples<br/>In method edu.jas.ps.Examples.example11()<br/>Local variable stored in JVM register 0<br/>At Examples.java:[line 273]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66096');">
+<td>
+<span class="priority-2">MS</span>
+</td>
+<td>edu.jas.kern.ComputerThreads.NO_THREADS isn't final and can't be protected from malicious code </td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66096" style="display: none;">
+<a href="#MS_CANNOT_BE_FINAL">Bug type MS_CANNOT_BE_FINAL (click for details)</a>
+<br/>In class edu.jas.kern.ComputerThreads<br/>Field edu.jas.kern.ComputerThreads.NO_THREADS<br/>At ComputerThreads.java:[line 40]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_PERFORMANCE">Performance Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65938');">
+<td>
+<span class="priority-2">WMI</span>
+</td>
+<td>edu.jas.gb.OrderedSyzPairlist.put(GenPolynomial) makes inefficient use of keySet iterator instead of entrySet iterator</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65938" style="display: none;">
+<a href="#WMI_WRONG_MAP_ITERATOR">Bug type WMI_WRONG_MAP_ITERATOR (click for details)</a>
+<br/>In class edu.jas.gb.OrderedSyzPairlist<br/>In method edu.jas.gb.OrderedSyzPairlist.put(GenPolynomial)<br/>At OrderedSyzPairlist.java:[line 226]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66348');">
+<td>
+<span class="priority-2">WMI</span>
+</td>
+<td>edu.jas.poly.RelationTable.equalMaps(Map, Map) makes inefficient use of keySet iterator instead of entrySet iterator</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66348" style="display: none;">
+<a href="#WMI_WRONG_MAP_ITERATOR">Bug type WMI_WRONG_MAP_ITERATOR (click for details)</a>
+<br/>In class edu.jas.poly.RelationTable<br/>In method edu.jas.poly.RelationTable.equalMaps(Map, Map)<br/>At RelationTable.java:[line 173]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_STYLE">Dodgy code Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65595');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.application.RingFactoryTokenizer.nextCoefficientRing() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65595" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextCoefficientRing()<br/>At RingFactoryTokenizer.java:[line 499]<br/>At RingFactoryTokenizer.java:[line 501]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66147');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66147" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing()<br/>At GenPolynomialTokenizer.java:[line 765]<br/>At GenPolynomialTokenizer.java:[line 767]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66735');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L10 in edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66735" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.ufd.GreatestCommonDivisorHensel<br/>In method edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)<br/>Local variable stored in JVM register 10<br/>At GreatestCommonDivisorHensel.java:[line 329]<br/>Another occurrence at GreatestCommonDivisorHensel.java:[line 330]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66210');">
+<td>
+<span class="priority-2">SF</span>
+</td>
+<td>Switch statement found in edu.jas.poly.GenPolynomialTokenizer.nextPolynomial() where one case falls through to the next case</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66210" style="display: none;">
+<a href="#SF_SWITCH_FALLTHROUGH">Bug type SF_SWITCH_FALLTHROUGH (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextPolynomial()<br/>At GenPolynomialTokenizer.java:[lines 307-310]</p>
+</td>
+</tr>
+</table>
+<h1>
+<a name="Details">Details</a>
+</h1>
+<h2>
+<a name="DB_DUPLICATE_BRANCHES">DB_DUPLICATE_BRANCHES: Method uses the same code for two branches</a>
+</h2>
+      
+      <p>
+      This method uses the same code to implement two branches of a conditional branch.
+    Check to ensure that this isn't a coding mistake.
+      </p>
+      
+   
+<h2>
+<a name="DLS_DEAD_LOCAL_STORE">DLS_DEAD_LOCAL_STORE: Dead store to local variable</a>
+</h2>
+
+<p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    
+<h2>
+<a name="MS_CANNOT_BE_FINAL">MS_CANNOT_BE_FINAL: Field isn't final and can't be protected from malicious code</a>
+</h2>
+
+  <p>
+ A mutable static field could be changed by malicious code or
+        by accident from another package.
+   Unfortunately, the way the field is used doesn't allow
+   any easy fix to this problem.</p>
+
+    
+<h2>
+<a name="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">NM_SAME_SIMPLE_NAME_AS_SUPERCLASS: Class names shouldn't shadow simple name of superclass</a>
+</h2>
+
+  <p> This class has a simple name that is identical to that of its superclass, except
+that its superclass is in a different package (e.g., <code>alpha.Foo</code> extends <code>beta.Foo</code>).
+This can be exceptionally confusing, create lots of situations in which you have to look at import statements
+to resolve references and creates many
+opportunities to accidently define methods that do not override methods in their superclasses.
+</p>
+
+    
+<h2>
+<a name="RV_NEGATING_RESULT_OF_COMPARETO">RV_NEGATING_RESULT_OF_COMPARETO: Negating the result of compareTo()/compare()</a>
+</h2>
+
+  <p> This code negatives the return value of a compareTo or compare method.
+This is a questionable or bad programming practice, since if the return
+value is Integer.MIN_VALUE, negating the return value won't
+negate the sign of the result. You can achieve the same intended result
+by reversing the order of the operands rather than by negating the results.
+</p>
+
+    
+<h2>
+<a name="SA_LOCAL_SELF_COMPARISON">SA_LOCAL_SELF_COMPARISON: Self comparison of value with itself</a>
+</h2>
+
+<p> This method compares a local variable with itself, and may indicate a typo or
+a logic error.  Make sure that you are comparing the right things.
+</p>
+
+    
+<h2>
+<a name="SF_SWITCH_FALLTHROUGH">SF_SWITCH_FALLTHROUGH: Switch statement found where one case falls through to the next case</a>
+</h2>
+
+  <p> This method contains a switch statement where one case branch will fall through to the next case.
+  Usually you need to end this case with a break or return.</p>
+
+    
+<h2>
+<a name="SE_NO_SERIALVERSIONID">SE_NO_SERIALVERSIONID: Class is Serializable, but doesn't define serialVersionUID</a>
+</h2>
+
+  <p> This class implements the <code>Serializable</code> interface, but does
+  not define a <code>serialVersionUID</code> field.&nbsp;
+  A change as simple as adding a reference to a .class object
+    will add synthetic fields to the class,
+   which will unfortunately change the implicit
+   serialVersionUID (e.g., adding a reference to <code>String.class</code>
+   will generate a static field <code>class$java$lang$String</code>).
+   Also, different source code to bytecode compilers may use different
+   naming conventions for synthetic variables generated for
+   references to class objects or inner classes.
+   To ensure interoperability of Serializable across versions,
+   consider adding an explicit serialVersionUID.</p>
+
+    
+<h2>
+<a name="WMI_WRONG_MAP_ITERATOR">WMI_WRONG_MAP_ITERATOR: Inefficient use of keySet iterator instead of entrySet iterator</a>
+</h2>
+
+<p> This method accesses the value of a Map entry, using a key that was retrieved from
+a keySet iterator. It is more efficient to use an iterator on the entrySet of the map, to avoid the
+Map.get(key) lookup.</p>
+
+        </body>
+</html>

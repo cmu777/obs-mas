@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" type="text/css" href="html.css" />
+    <title>JAS Project</title>
+  </head>
+  <body class="main">
+    <h1>Java Algebra System (JAS) Project </h1>
+
+<p><strong>Introduction.</strong> 
+The Java Algebra System (JAS) is an object oriented, type safe and
+multi-threaded approach to computer algebra.
+JAS provides a well designed software library using generic types 
+for algebraic computations implemented in the Java programming language using the JVM runtime infrastructure.
+The library can be used as any other Java software package or it can be
+used interactively or interpreted through a jython (Java Python) or jruby (Java Ruby) front end,
+there is also an Android App based on Ruboto (jruby for Android).
+The focus of JAS is at the moment on commutative, solvable and non-commutative polynomials, 
+power series, Groebner bases, factorization, real and complex roots and applications. 
+By the use of Java as implementation language JAS is 64-bit and multi-core CPU
+ready and can make use of mutiple CPUs where available.
+JAS can run on a wide variety of devices ranging from Android to
+compute clusters (using MPJ a Java Message Passing Interface (MPI) or OpenMPI).
+</p>
+
+<p>
+The library contains at the moment of the following 
+<a name="package">packages</a>:
+</p>
+<dl>
+<dt>edu.jas.structure:</dt>
+<dd>
+  contains interfaces for the most general algebraic structures like
+  <code>RingElem</code> and <code>RingFactory</code>.
+</dd>
+<dt>edu.jas.arith:</dt>
+<dd>
+  contains classes for arithmetic in the basic coefficient rings like
+  <code>BigRational</code>, <code>BigInteger</code>,
+  <code>ModInteger</code>, <code>BigDecimal</code> or
+  <code>BigComplex</code>.
+</dd>
+<dt>edu.jas.poly:</dt>
+<dd>
+  contains classes for commutative polynomial, solvable polynomial and
+  free non-commutative polynomial arithmetic like
+  <code>GenPolynomial</code>, <code>GenSolvablePolynomial</code>,
+  <code>GenWordPolynomial</code> and others such as
+  <code>AlgebraicNumber</code> and a polynomial parser
+  <code>GenPolynomialTokenizer</code>.
+</dd>
+<dt>edu.jas.vector:</dt>
+<dd>
+  contains classes for vectors and lists of polynomials and solvable
+  polynomials like <code>GenVector</code> or <code>GenMatrix</code>.
+</dd>
+<dt>edu.jas.gb:</dt>
+<dd>
+  contains classes for polynomial and solvable polynomial reduction,
+  Gr&ouml;bner bases over fields and ideal arithmetic as well as
+  thread parallel and distributed versions of Buchbergers algorithm
+  like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
+  <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code> and
+  <code>GroebnerBaseDistributedHybridEC</code>.  There are also Gr&ouml;bner
+  bases in polynomial rings over principal ideal domains and Euclidean
+  domains, so called D- and E-Gr&ouml;bner bases,
+  e.g. <code>EGroebnerBaseSeq</code>. New are Gr&ouml;bner bases in
+  free non-commutative polynomial rings over (skew) fields,
+  see <code>WordGroebnerBaseSeq</code>.
+</dd>
+<dt>edu.jas.gbmod:</dt>
+<dd>
+  contains classes for module Gr&ouml;bner bases and syzygies over
+  polynomials and solvable polynomials like
+  <code>ModGroebnerBase</code> or <code>SolvableSyzygy</code>.
+</dd>
+<dt>edu.jas.application:</dt>
+<dd>
+  contains classes with applications of Gr&ouml;bner bases such as ideal
+  intersections and ideal quotients implemented in <code>Ideal</code>
+  or <code>SolvableIdeal</code>. Comprehensive Gr&ouml;bner bases for
+  polynomial rings over parameter rings are contained in class
+  <code>ComprehensiveGroebnerBaseSeq</code>.  Latest additions are
+  zero and arbitrary dimensional radical-, irreducible-, prime- and
+  primary-decomposition implemented in class <code>Ideal</code>.
+</dd>
+<dt>edu.jas.ufd:</dt>
+<dd>
+  contains classes for unique factorization domains.  Like the
+  interface <code>GreatestCommonDivisor</code>, the abstract class
+  <code>GreatestCommonDivisorAbstract</code> and various
+  implementations, e.g. polynomial remainder sequences and modular
+  algorithms.  The package now contains factorization algorithms for
+  univariate polynomials over several coefficient rings: modulo primes
+  in class <code>FactorModular</code>, over integers in class
+  <code>FactorInteger</code>, over rational numbers in class
+  <code>FactorRational</code> and over algebraic numbers in class
+  <code>FactorAlgebraic&lt;C&gt;</code>.
+</dd>
+<dt>edu.jas.gbufd:</dt>
+<dd>
+  contains classes for Gr&ouml;bner base computation using classes
+  from the <em>edu.jas.ufd</em> package for polynomial
+  coefficients. The main classes deal with pseudo reduction
+  <code>PseudoReduction</code>, <code>PseudoReductionSeq</code> and
+  greatest common divisors computation on coefficients
+  <code>GroebnerBasePseudoSeq</code>. Multiplicative sets of
+  polynomials with several simplifications, e.g. maintaining co-prime
+  factors or co-prime and squarefree factors, are contained in classes
+  <code>MultiplicativeSet</code>, <code>MultiplicativeSetCoPrime</code> 
+  or <code>MultiplicativeSetSquarefree</code>.  Also contained are
+  Gr&ouml;bner bases for polynomial rings over regular rings (direct
+  products of fields or integral domains) in
+  <code>RGroebnerBaseSeq</code> and <code>RGroebnerBasePseudoSeq</code>.
+</dd>
+<dt>edu.jas.root:</dt>
+<dd>
+  contains classes for real root computations.  Like the
+  interface <code>RealRoots</code>, the abstract class
+  <code>RealRootsAbstract</code> and at the moment of a single 
+  implementation based on Sturm sequences <code>RealRootsSturm</code>.
+  The package further contains an implementation for real algebraic numbers 
+  <code>RealAlgebraicNumber</code> with a corresponding factory
+  <code>RealAlgebraicRing</code>.
+  For complex root isolation there are <code>ComplexRoots</code> interface,
+  <code>ComplexRootsAbstract</code> and <code>ComplexRootsSturm</code> classes.
+  The implementation provides an exact infallible method which follows
+  the numeric method of Wilf.  It uses Sturm sequences following the
+  Routh-Hurwitz Method to count the number of complex roots within a
+  rectangle in the complex plane.
+  There is also an implementation for complex algebraic numbers 
+  <code>ComplexAlgebraicNumber</code> with a corresponding factory
+  <code>ComplexAlgebraicRing</code>.
+</dd>
+<dt>edu.jas.ufdroot:</dt>
+<dd>
+  contains classes for factorization in structures used in root
+  computation, for example <code>FactorRealAlgebraic</code>.
+</dd>
+<dt>edu.jas.ps:</dt>
+<dd>
+  contains univariate and multivariate power series arithmetic
+  in classes <code>UnivPowerSeries</code> and <code>MultiVarPowerSeries</code>.
+  There is an initial implementation of Mora's tangent cone reduction algorithm 
+  in class <code>ReductionSeq</code> and a standard bases computation in 
+  <code>StandardBaseSeq</code> with method <code>STD()</code>.
+</dd>
+<dt>edu.jas.integrate:</dt>
+<dd>
+  contains methods for the elementary integration of univariate rational functions.
+  The main class is <code>ElementaryIntegration</code> with method 
+  <code>integrate()</code>. 
+</dd>
+<dt>edu.jas.util:</dt>
+<dd>
+  contains further utilities for parallel and distributed computations
+  like <code>ThreadPool</code>, <code>DistThreadPool</code> or
+  <code>DistHashTable</code>. Part of this package has become obsolete
+  with JDK 1.5.
+</dd>
+<dt>edu.jas.fd:</dt>
+<dd>
+  contains classes for solvable polynomials rings as (non-unique)
+  factorization domains. There are methods for polynomial pseudo
+  remainder computation over Ore domains in class <code>FDUtil</code>.
+  Further, methods for common divisors are included, but not yet
+  finished.
+  <!-- Methods provided with interface
+  <code>GreatestCommonDivisor</code> are e.g. greatest common divisors
+  <code>gcd()</code>, primitive part <code>primitivePart()</code>.-->
+</dd>
+</dl>
+
+<p>
+This page contains documentation and the implementation for the new version 
+which is designed using type parameters and requires at least Java 6 (JDK 1.6).
+It will also compile on Java 7 (JDK 1.7).
+Older versions (no more supported) can be found here: 
+<a href="../jas-2.4">JAS 2.4</a>,
+<a href="../jas-2.3">JAS 2.3</a>,
+<a href="../jas-2.2">JAS 2.2</a>,
+<a href="../jas-2.1">JAS 2.1</a>,
+<a href="../jas-2.0">JAS 2.0</a>,
+<a href="../jas.j15">JAS using JDK 1.5</a> and
+<a href="../jas.j14">JAS using JDK 1.4</a>.
+</p>
+
+
+<h2><a name="docu">Documentation</a></h2>
+
+<p>
+For informations on how to get started with JAS see the <a href="guide.html" >users guide</a>.
+For frequently asked question see <a href="faq.html" >FAQ</a>.
+There is an <a href="gb-book.html">index of algorithms</a> for the book 
+<a href="http://www.springer.com/mathematics/book/978-0-387-97971-7" target="gbb">Gr&ouml;bner bases</a> 
+and their JAS equivalents.
+An <a href="algo-ca-book.html">index of algorithms</a> for the book 
+<a href="http://www.springer.com/computer/theoretical+computer+science/book/978-0-7923-9259-0" 
+target="gbb">Algorithms for Computer Algebra</a> 
+and their JAS equivalents is also available.
+</p>
+
+<p>
+The JAS <a href="design.html" target="main" >API guide</a>
+describes the interface and class design considerations and contains
+an overview of the most important classes and methods.  An online
+Javadoc documentation of the API together with source code is
+contained in the 
+<a href="doc/index.html" target="main" >API documentation</a> 
+(also available as <a href="jas-doc.jar" target="doc">jas-doc.jar</a>).  
+Some <a href="problems.html" target="main" >design
+considerations</a> for the new generic version.
+</p>
+
+<p><a href="README" target="main" >README</a>
+and 
+<a href="COPYING.jas" target="copy" >COPYING.jas</a> (GPL)
+or 
+<a href="COPYING.lgpl.jas" target="copy" >COPYING.lgpl.jas</a> (LGPL).
+(The Java bytecode is dual licenced also under the Apache 2.0 licence 
+to allow usage in Android projects.)
+</p>
+
+
+
+<h3>Published papers and talks about JAS</h3>
+
+<p>An Overview on Groebner Bases implementations is given in
+   <a href="http://dx.doi.org/10.1007/978-3-662-44199-2_60" target="icms"  
+      >Heinz Kredel  
+        <i>Generic and Parallel Groebner Bases in JAS</i> (Extended Abstract)</a>, 
+    proceedings of the International Congress on Mathematical Software 
+    (<a href="http://voronoi.hanyang.ac.kr/icms2014/" target="new">ICMS</a>) August 5-9, 2014, Seoul, Korea.  
+    LNCS 8592, pp. 390 - 397, 2014, Springer-Verlag Berlin Heidelberg 
+    (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-gen-par-gb-icms2014-slides.pdf" target="icms">slides</a>)   
+</p>
+
+<p>Design and experiences using MPJ and high speed InfiniBand networking for 
+   algebraic computations are described in
+   <a href="http://doi.ieeecomputersociety.org/10.1109/WAINA.2013.101" target="aina" 
+      >Heinz Kredel,
+      <i>Distributed Gr&ouml;bner bases computation with MPJ</i></a>,
+   proceedings of the 
+   <a href="http://krum.rz.uni-mannheim.de/eoops/index-2013.html" target="aina">EOOPS Workshop</a> at
+   <a href="http://www.aina-conference.org/2013/" target="aina">AINA-2013</a>, 
+   March 25-28, 2013, Barcelona, Spain 
+   (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-gb-mpj-aina2013-slides.pdf"  target="aina">slides</a>)  
+</p>
+
+<p>Some ideas on categories and mixin composition in ScAS and JAS are presented in the poster 
+   <a href="http://krum.rz.uni-mannheim.de/kredel/com-casc2012-poster.pdf" target="casc"  
+      >Raphael Jolly, Heinz Kredel, 
+      <i>Categories as classes and mixin composition</i></a>, 
+   Poster at  
+   <a href="http://www14.in.tum.de/CASC2012/">CASC 2012</a>, 
+   September 3-6, 2012, Maribor, Slovenia 
+</p>
+
+<p>A comparison of API interfaces for computer algebra is presented in the paper
+   <a href="http://doi.ieeecomputersociety.org/10.1109/WAINA.2012.158" target="aina" 
+      >Heinz Kredel,
+       <i>Fostering Interoperability in Java-Based Computer Algebra Software</i></a>,
+    Proceedings FINA Workshop
+    <a href="http://www.aina-conference.org/2012/">AINA-2012</a>, 
+    March 26-29, 2012, Fukuoka, Japan
+    (<a href="http://krum.rz.uni-mannheim.de/kredel/cas-inter-aina2012-slides.pdf" target="aina">slides</a>)
+</p>
+
+<p>The design of algebraic extension structures in JAS and ScAS is presented in the talk 
+   <a href="http://www.springerlink.com/content/978-3-642-23567-2/#section=950349" target="casc"
+      >Raphael Jolly, Heinz Kredel,
+       <i>Algebraic Structures as Typed Objects</i></a>,
+    at the Workshop on Computer Algebra in Scientific Computing
+    <a href="http://www14.in.tum.de/CASC2011/">CACS 2011</a>,
+    Kassel, Germany, 2011
+    (<a href="http://krum.rz.uni-mannheim.de/kredel/to-cas-casc2011-slides.pdf" target="casc">slides</a>)
+</p>
+
+<p>An early description of the JAS package for unique factorization domains 
+   (greatest common divisors, square-free decomposition, factorization) 
+   is contained in the article
+   <a href="http://dx.doi.org/10.1007/978-3-642-21046-4_5" target="adg" 
+      >Heinz Kredel,
+   <i>Unique Factorization Domains in the Java Computer Algebra System</i></a>,
+   Special issue on Automated Deduction in Geometry,
+   Lecture Notes in Computer Science volume 6301, pages 86-115,
+   Springer, 2011
+</p>
+
+<p>The design of JAS and ScAS is presented together with examples in the talk 
+   <a href="http://dx.doi.org/10.1007/978-3-642-15274-0_14" target="casc"
+      >Raphael Jolly, Heinz Kredel,
+       <i>Generic, Type-safe and Object Oriented Computer Algebra Software</i></a>,
+    at the Workshop on Computer Algebra in Scientific Computing
+    <a href="http://www14.in.tum.de/CASC2010/">CACS 2010</a>,
+    Tsakhkadzor, Armenia, 2010
+    (<a href="http://krum.rz.uni-mannheim.de/kredel/oocas-casc2010-slides.pdf" target="casc">slides</a>)
+</p>
+
+<p>Performance meassurements for the distributed hybrid Gr&ouml;bner
+   bases implementation are contained in the paper
+   <a href="http://arxiv.org/abs/1008.0011" target="arxiv" 
+      ><i>Parallel and distributed Gr&ouml;bner bases computation in JAS</i></a>,
+    avaliable as
+    <a href="http://arxiv.org/abs/1008.0011" target="arxiv" 
+       >arxiv:1008.0011</a>, 2010.
+</p>
+
+<p>The new distributed hybrid Gr&ouml;bner bases implementation 
+   is explained in the talk 
+   <a href="http://doi.ieeecomputersociety.org/10.1109/CISIS.2010.26" target="ecds"  
+      ><i>Distributed hybrid Groebner bases computation</i></a>, 
+   at the
+   <a href="http://www.cisis-conference.eu/" target="ecds">CISIS 2010</a>  
+   Workshop on  
+   <a href="http://voyager.ce.fit.ac.jp/conferences/ecds2010/" target="ecds"  
+      >Engineering Complex Distributed Systems (ECDS 2010)</a>, Krakow. 
+   (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-ecds2010-slides.pdf" target="ecds">slides</a>)
+</p> 
+
+<p>A description of the JAS comprehensive Gr&ouml;bner bases package is be 
+   contained in the talk 
+   <a href="http://krum.rz.uni-mannheim.de/kredel/jas-ascm2009-slides.pdf" target="ascm" 
+      ><i>Comprehensive Gr&ouml;bner bases in a Java Computer Algebra System</i></a>,
+   at the 
+   <a href="http://gcoe.math.kyushu-u.ac.jp/ascm-macis2009/" target="ascm"
+    >Asian Symposium on Computers and Mathematics (ASCM 2009)</a>, 
+    Fukuoka.
+</p>
+
+<p>Some unique factorization domain algorithms in JAS are contained 
+   in the seminar presentation
+   <a href="http://krum.rz.uni-mannheim.de/kredel/ca-sem-2009.pdf" target="fmi"
+      >Tools for the integration of rational functions in Java</a>,
+   during the Computer-Algebra Seminar, University of Mannheim, FMI 2009
+</p> 
+
+<p>More background information on the python scripting interface 
+   for JAS and ScAS can be found in the article 
+   <a href="http://de.arxiv.org/abs/0906.2315" target="arxivascm"  
+      >Raphael Jolly, Heinz Kredel, 
+        <i>Symbolic Script Programming for Java</i></a>, 
+    avaliable as 
+    <a href="http://de.arxiv.org/abs/0906.2315" target="arxivascm"  
+       >arXiv:0906.2315v2</a>, 2009.
+</p>
+
+<p>The parallel and distributed Gr&ouml;bner bases implementations are explained in 
+   the talk 
+   <a href="http://doi.ieeecomputersociety.org/10.1109/CISIS.2009.109" target="ecds"  
+       ><i>Distributed parallel Groebner bases computation</i></a>, 
+    at the
+    <a href="http://www.cisis-conference.eu/" target="ecds">CISIS 2009</a>  
+    Workshop on  
+    <a href="http://voyager.ce.fit.ac.jp/conferences/ecds2009/" target="ecds"  
+       >Engineering Complex Distributed Systems (ECDS 2009)</a>, Fukuoka 
+    (<a href="http://krum.rz.uni-mannheim.de/kredel/jas-ecds2009-slides.pdf" target="ecds"  
+    >slides</a>) 
+</p> 
+
+<p>The Gr&ouml;bner bases implementation of JAS is explained 
+   in the seminar presentation
+<a href="http://krum.rz.uni-mannheim.de/kredel/ca-sem-2008.pdf" target="fmi"
+        >Gr&ouml;bner bases and applications in Java</a>,
+   during the Computer-Algebra Seminar, University of Mannheim, FMI 2008
+</p> 
+
+<p>A description of the JAS greatest common divisor package is contained
+   in the talk 
+   <a href="http://krum.rz.uni-mannheim.de/kredel/jas-adg2008-slides.pdf" target="adg" 
+      ><i>Multivariate Greatest Common Divisors in the Java Computer Algebra System</i></a>,
+   at the International Workshop on 
+   <a href="http://adg2008.redlog.eu/" target="adg"
+      >Automated Deduction in Geometry (ADG 2008)</a>, Shanghai.
+</p>
+
+<p>Some background information on the python scripting interface 
+   for JAS can be found in the article 
+   <a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
+      >Raphael Jolly, Heinz Kredel, 
+   <i>How to turn a scripting language into a domain specific language for computer algebra</i></a>, 
+   avaliable as 
+   <a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
+      >arXiv:0811.1061v1</a>, 2008. 
+   Previous title was <i>Computer algebra in Java: libraries and scripting</i>. 
+</p>
+
+<p>A comparison of JAS to other Computer Algebra Systems is contained 
+   in the talk 
+   <a href="http://krum.rz.uni-mannheim.de/kredel/jas-ascm2007-slides.pdf" target="ascm" 
+      ><i>Evaluation of a Java Computer Algebra System</i></a>,
+   at the 
+   <a href="http://www.comp.nus.edu.sg/~ascm2007/" target="ascm"
+      >Asian Symposium on Computer Mathematics (ASCM 2007)</a>, Singapore. 
+   <br />
+   It has been published as paper in
+   <a href="http://dx.doi.org/10.1007/978-3-540-87827-8_10" target="ascm" 
+      >Heinz Kredel,
+   <i>Evaluation of a Java Computer Algebra System</i></a>,
+   Special issue <a href="http://dx.doi.org/10.1007/978-3-540-87827-8">Computer Mathematics</a> 
+   of ASCM 2007 Revised and Invited Papers in
+   Lecture Notes in Computer Science, volume 5081/2008, pages 121-138,
+   Springer Berlin / Heidelberg
+</p>
+
+<p>An article 
+<a href="http://dx.doi.org/10.1016/j.scico.2007.07.010" target="scico" 
+       ><i>On a Java Computer Algebra System, its Performance and Applications</i></a>,
+in
+<a href="http://www.elsevier.com/wps/find/journaldescription.cws_home/505623/description"
+   title="http://www.sciencedirect.com/science/journal/01676423" target="scico"
+   >Science of Computer Programming (2008)</a>. 
+</p>
+
+<p>At the 
+<a href="http://www.wifo.uni-mannheim.de/pppj2006/" target="a3l">PPPJ 2006 conference in Mannheim</a> 
+I presented the design of the JAS types, classes and implementation 
+"<a href="http://doi.acm.org/10.1145/1168054.1168075"
+    target="pppj" 
+   >On the Design of a Java Computer Algebra System</a>"
+<!--"http://krum.rz.uni-mannheim.de/kredel/jas-pppj2006.pdf"-->
+(<a href="http://krum.rz.uni-mannheim.de/kredel/jas-pppj2006-slides.pdf" target="pppj" 
+   >slides</a>).
+</p>
+
+<p>At the 
+<a href="http://www.a3l.org/" target="a3l">A3L conference in Passau, 2005</a> 
+I gave some background information on the development from MAS to JAS 
+"<a href="http://krum.rz.uni-mannheim.de/kredel/jas-a3l.pdf" target="a3l" 
+   >A Systems Perspective on A3L</a>"
+(<a href="http://krum.rz.uni-mannheim.de/kredel/jas-a3l-slides.pdf" target="a3l" 
+   >slides</a>).
+</p>
+
+<p>The JAS project is also listed in the swMATH index of mathematical software
+    <a href="http://www.swmath.org/software/5877" target="swmath">JAS</a>.
+</p>
+
+<p>The history of the JAS project can be found in the 
+   <a href="jas-log.html" target="main">Web-Log</a>.
+   See also the <a href="related.html" target="main">related projects</a>
+   and <a href="acknowledge.html" target="main">credits</a>.
+</p>
+
+
+<h2><a name="downlo">Download</a>, installation and unit tests</h2>
+
+<p>
+See <a href="download.html" target="main">Download</a> page.
+</p>
+
+
+<h2><a name="eclipse-usage">Usage</a> with the JEclipse IDE</h2>
+
+<p>
+See <a href="download.html#eclipse" target="main">Download</a> 
+page.
+</p>
+
+
+<h2><a name="jython-usage">Usage</a> with the Jython interpreter</h2>
+
+<p>
+See <a href="download.html#jython" target="main">Download</a> 
+and <a href="guide.html" target="main">Users guide</a> pages.
+</p>
+
+<h4>jython examples</h4>
+
+<p>Commutative:
+<a href="examples/trinks.py" target="py">trinks.py</a>,
+<a href="examples/katsura.py" target="py">katsura.py</a>
+</p>
+<p>Solvable:
+<a href="examples/wa_32.py" target="py">wa_32.py</a>,
+<a href="examples/u_sl_3_prod.py" target="py">u_sl_3_prod.py</a>,
+<a href="examples/u_sl_3.py" target="py">u_sl_3.py</a>
+</p>
+<p>Modules:
+<a href="examples/armbruster.py" target="py">armbruster.py</a>,
+<a href="examples/syz.py" target="py">syz.py</a>,
+<a href="examples/syzy2.py" target="py">syzy2.py</a>
+</p>
+
+<h2><a name="jruby-usage">Usage</a> with the JRuby interpreter</h2>
+
+<p>
+See <a href="download.html#jruby" target="main">Download</a>. 
+<!--and <a href="guide.html" target="main">Users guide</a> pages.-->
+</p>
+
+<h4>jruby examples</h4>
+
+<p>Commutative:
+<a href="examples/trinks.rb" target="rb">trinks.rb</a>,
+<a href="examples/all_rings.rb" target="rb">all_rings.rb</a>,
+<a href="examples/gbs.rb" target="rb">gbs.rb</a>
+</p>
+
+
+<h2><a name="ruboto-usage">Usage</a> of the Android App</h2>
+
+<p>
+
+See <a href="download.html#ruboto-irb-jas" target="main">Download</a>. 
+<!--and <a href="guide.html" target="main">Users guide</a> pages.--> 
+As the Android app is based on Ruboto (jruby IRB for Android) the
+usage is the same as with JRuby. There is a "Scripts" button in the
+app where all ruby examples can be accessed.
+</p>
+
+<p>The main Ruboto screen with the "trinks.rb" example and its output looks as follows.
+</p>
+<p>
+<a href="images/device-2012-11-18-jas-trinks.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-thumb.png" /></a> &nbsp;
+<a href="images/device-2012-11-18-jas-trinks-out.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" /></a> &nbsp;
+<a href="images/device-2012-11-18-jas-trinks-out-big.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" /></a>
+</p>
+
+
+
+<h2><a name="rungb">RunGB</a> Examples</h2>
+
+<p>
+The following are examples which can be executed with 
+the class edu.jas.application.RunGB. E.g. <br />
+<code>java -cp .:log4j.jar:jas.jar:... edu.jas.application.RunGB &lt;args&gt;</code>
+</p>
+
+<p>Commutative:
+<a href="ring/gbks.jas" target="jas">gbks.jas</a>,
+<a href="ring/katsura2.jas" target="jas">katsura2.jas</a>,
+<a href="ring/katsura3.jas" target="jas">katsura3.jas</a>,
+<a href="ring/katsura4.jas" target="jas">katsura4.jas</a>,
+<a href="ring/katsura5.jas" target="jas">katsura5.jas</a>,
+<a href="ring/katsura5s.jas" target="jas">katsura5s.jas</a>,
+<a href="ring/katsura5w.jas" target="jas">katsura5w.jas</a>,
+<a href="ring/katsura6.jas" target="jas">katsura6.jas</a>,
+<a href="ring/katsura6w.jas" target="jas">katsura6w.jas</a>,
+<a href="ring/katsura7.jas" target="jas">katsura7.jas</a>,
+<a href="ring/katsura8.jas" target="jas">katsura8.jas</a>,
+<a href="ring/rose.jas" target="jas">rose.jas</a>,
+<a href="ring/trinks6.jas" target="jas">trinks6.jas</a>,
+<a href="ring/trinks7.jas" target="jas">trinks7.jas</a>,
+<a href="ring/vw.jas" target="jas">vw.jas</a>,
+</p>
+
+<p>Solvable:
+<a href="ring/kw_18.jas" target="jas">kw_18.jas</a>,
+<a href="ring/ore_t.jas" target="jas">ore_t.jas</a>,
+<a href="ring/sgb.jas" target="jas">sgb.jas</a>,
+<a href="ring/u_sl_3.jas" target="jas">u_sl_3.jas</a>,
+<a href="ring/wa_1.jas" target="jas">wa_1.jas</a>,
+<a href="ring/wa_32.jas" target="jas">wa_32.jas</a>,
+<a href="ring/wa_34.jas" target="jas">wa_34.jas</a>,
+<a href="ring/wa_39.jas" target="jas">wa_39.jas</a>,
+<a href="ring/wa_41.jas" target="jas">wa_41.jas</a>,
+<a href="ring/wa_61.jas" target="jas">wa_61.jas</a>
+</p>
+
+<hr />
+<address><a name="contact" 
+            href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a>
+</address>
+
+<p>
+<!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
+<!-- hhmts start -->
+Last modified: Sat Aug 16 11:28:04 CEST 2014
+<!-- hhmts end -->
+</p>
+<!--p align="right" >
+$Id: intro.html 4872 2014-08-16 09:45:10Z kredel $
+</p-->
+
+<p>
+<a href="http://validator.w3.org/check?uri=referer" target="w3c"
+   ><img src="http://www.w3.org/Icons/valid-xhtml10" height="31" width="88"
+         alt="Valid XHTML 1.0!" /></a>
+
+ <a href="http://jigsaw.w3.org/css-validator/" target="w3c"
+    ><img src="http://www.w3.org/Icons/valid-css"
+          alt="Valid CSS!" height="31" width="88"
+     /></a>
+</p>
+
+  </body>
+</html>

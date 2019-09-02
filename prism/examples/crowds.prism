@@ -1,0 +1,193 @@
+// crowds protocol
+// 4 players
+
+ldtmc
+
+//observations from player4's view
+observations
+	i1->null, i2->null, i3->null,
+	s11->null, s12->null, s13->null, s14->s14,
+	s21->null, s22->null, s23->null, s24->s14,
+	s31->null, s32->null, s33->null, s34->s14,
+	s41->s41, s42->s42, s43->s43, s44->s44,
+	r11->null, r12->null, r13->null, r14->r14,
+	r21->null, r22->null, r23->null, r24->r14,
+	r31->null, r32->null, r33->null, r34->r14,
+	r41->r41, r42->r42, r43->r43, r44->r44,
+	c1->null, nc1->null, d1->null,
+	c2->null, nc2->null, d2->null,
+	c3->null, nc3->null, d3->null,
+	c4->c4, nc4->nc4, d4->d4
+endobservations
+
+//total number of players
+const int N=4; 
+//total number of honest players
+const int Nh=3;
+
+//probability of continue to relay, 1-PF probability of forwarding to the dest
+const double PF=0.5; 
+
+// Probability that a crowd member to coorporate or be selfish
+const double x1 = 0.7;
+const double x2 = 0.7;
+const double x3 = 0.7;
+const double x4 = 0;
+
+//malicious or not
+const bool m1 = false;
+const bool m2 = false;
+const bool m3 = false;
+const bool m4 = true;
+
+
+// formulae 
+// there is a message sent to (initiator) player 1
+formula msgTo1 = i=1 & (s=1 | s=4);
+
+// there is a message sent to (honest) player 2
+formula msgTo2 = i=2 & (s=1 | s=4);
+
+// there is a message sent to (honest) player 3
+formula msgTo3 = i=3 & (s=1 | s=4);
+
+// there is a message sent to (malicious) player 4
+formula msgTo4 = i=4 & (s=1 | s=4);
+
+
+// make decisions: to corporate or not
+formula decision1 = msgTo1 & !m1 & ii!=1 ;
+formula decision2 = msgTo2 & !m2 & ii!=2 ;
+formula decision3 = msgTo3 & !m3 & ii!=3 ;
+formula decision4 = msgTo4 & !m4 & ii!=4 ;
+
+
+
+module crowds
+
+	//status: 0-initiator picked up 1-sent 2-cor 3-notcor/discarded 4-relayed 5-dest
+	s: [-1..5] init -1; //status: 0-initiator picked up 1-sent 2-cor 3-notcor 4-relayed 5-dest
+
+        //who is the initiator?
+        ii: [0..Nh] init 0;
+
+
+	i: [0..N] init 0; //send to
+	f: [0..N] init 0; //from
+
+	//pick up an initiator
+        [initiate] (s=-1) ->  1/Nh: i1: (f'=1) & (i'=1) & (s'=0) & (ii'=1)
+                              + 1/Nh: i2: (f'=2) & (i'=2) & (s'=0) & (ii'=2)
+                              + 1/Nh: i3: (f'=3) & (i'=3) & (s'=0) & (ii'=3) ;
+
+        /////////////////////////////
+        //if i=1 is an initiator
+
+        //start to send out a message
+	[s1] s=0 & ii=1 & i=1 -> 1/N : s11: (i'=1) & (s'=1)  + 1/N : s12: (i'=2) & (s'=1)  
+			+ 1/N : s13: (i'=3) & (s'=1) + 1/N : s14: (i'=4) & (s'=1) ; 
+	//to relay a message as an initiator
+	[r1] msgTo1 & ii=1 -> 1/N : r11: (i'=1) & (f'=i) & (s'=1)   
+			+ 1/N : r12: (i'=2) & (f'=i) & (s'=1)
+			+ 1/N : r13: (i'=3) & (f'=i) & (s'=1) 	
+			+ 1/N : r14: (i'=4) & (f'=i) & (s'=1); 
+
+        // if i=1 is an honest relayer- relay to each other
+        [c1] decision1 -> x1: c1: (f'=i) & (s'=2)
+                          + (1-x1): nc1: (i'=0) & (f'=0) & (ii'=0) & (s'=3)  ;
+	//to relay a message as an honest user
+        [r1] i=1 & s=2 & (ii!=1) & !m1 -> PF*1/N: r11: (i'=1) & (s'=4) & (f'=i)
+                                        + PF*1/N: r12: (i'=2) & (s'=4) & (f'=i)
+                                        + PF*1/N: r13: (i'=3) & (s'=4) & (f'=i)
+                                        + PF*1/N: r14: (i'=4) & (s'=4) & (f'=i)
+                                        + 1-PF:  d1: (s'=5) & (i'=0) & (f'=0) & (ii'=0)  ;
+
+        // if i=1 is a malicious member - send to the dest directly
+        [] msgTo1 & m1 -> 1: d1: (s'=5) & (i'=0) & (f'=0) & (ii'=0) ;
+
+
+        /////////////////////////////
+        //if i=2 is an initiator
+
+        //start to send out a message
+        [s2] s=0 & ii=2 & i=2 -> 1/N : s21: (i'=1) & (s'=1)  + 1/N : s22: (i'=2) & (s'=1)
+                        + 1/N : s23: (i'=3) & (s'=1) + 1/N : s24: (i'=4) & (s'=1) ;
+        //to relay a message as an initiator
+        [r2] msgTo2 & ii=2 -> 1/N : r21: (i'=1) & (f'=i) & (s'=1)
+                        + 1/N : r22: (i'=2) & (f'=i) & (s'=1)
+                        + 1/N : r23: (i'=3) & (f'=i) & (s'=1)
+                        + 1/N : r24: (i'=4) & (f'=i) & (s'=1);
+
+
+        // if i=2 is an honest relayer- relay to each other
+        [c2] decision2 -> x2: c2: (f'=i) & (s'=2)
+                          + (1-x2): nc2: (i'=0) & (f'=0) & (ii'=0) & (s'=3)   ;
+        //to relay a message as an honest user
+        [r2] i=2 & s=2 & (ii!=2) & !m2 -> PF*1/N: r21: (i'=1) & (s'=4) & (f'=i)
+                                        + PF*1/N: r22: (i'=2) & (s'=4) & (f'=i)
+                                        + PF*1/N: r23: (i'=3) & (s'=4) & (f'=i)
+                                        + PF*1/N: r24: (i'=4) & (s'=4) & (f'=i)
+                                        + 1-PF:  d2: (s'=5) & (i'=0) & (f'=0) & (ii'=0)  ;
+
+        // if i=2 is a malicious member - send to the dest directly
+        [] msgTo2 & m2 -> 1: d2: (s'=5) & (i'=0) & (f'=0) & (ii'=0) ;
+
+
+        /////////////////////////////
+        //if i=3 is an initiator
+
+        //start to send out a message
+        [s3] s=0 & ii=3 & i=3 -> 1/N : s31: (i'=1) & (s'=1)  + 1/N : s32: (i'=2) & (s'=1)
+                        + 1/N : s33: (i'=3) & (s'=1) + 1/N : s34: (i'=4) & (s'=1) ;
+        //to relay a message as an initiator
+        [r3] msgTo3 & ii=3 -> 1/N : r31: (i'=1) & (f'=i) & (s'=1)
+                        + 1/N : r32: (i'=2) & (f'=i) & (s'=1)
+                        + 1/N : r33: (i'=3) & (f'=i) & (s'=1)
+                        + 1/N : r34: (i'=4) & (f'=i) & (s'=1);
+
+
+        // if i=3 is an honest relayer- relay to each other
+        [c3] decision3 -> x3: c3: (f'=i) & (s'=2)
+                          + (1-x3): nc3: (i'=0) & (f'=0) & (ii'=0) & (s'=3)   ;
+        //to relay a message as an honest user
+        [r3] i=3 & s=2 & (ii!=3) & !m3 -> PF*1/N: r31: (i'=1) & (s'=4) & (f'=i)
+                                        + PF*1/N: r32: (i'=2) & (s'=4) & (f'=i)
+                                        + PF*1/N: r33: (i'=3) & (s'=4) & (f'=i)
+                                        + PF*1/N: r34: (i'=4) & (s'=4) & (f'=i)
+                                        + 1-PF: d3: (s'=5) & (i'=0) & (f'=0) & (ii'=0)  ;
+
+        // if i=3 is a malicious member - send to the dest directly
+        [] msgTo3 & m3 -> 1: d3: (s'=5) & (i'=0) & (f'=0) & (ii'=0) ;
+
+        /////////////////////////////
+        //if i=4 is an initiator
+        //start to send out a message
+        [s4] s=0 & ii=4 & i=4 -> 1/N : s41: (i'=1) & (s'=1)  + 1/N : s42: (i'=2) & (s'=1)
+                        + 1/N : s43: (i'=3) & (s'=1) + 1/N : s44: (i'=4) & (s'=1) ;
+        //to relay a message as an initiator
+        [r4] msgTo4 & ii=4 -> 1/N : r41: (i'=1) & (f'=i) & (s'=1)
+                        + 1/N : r42: (i'=2) & (f'=i) & (s'=1)
+                        + 1/N : r43: (i'=3) & (f'=i) & (s'=1)
+                        + 1/N : r44: (i'=4) & (f'=i) & (s'=1);
+
+
+        // if i=4 is an honest relayer- relay to each other
+        [c4] decision4 -> x4: c4: (f'=i) & (s'=2)
+                          + (1-x4): nc4: (i'=0) & (f'=0) & (ii'=0) & (s'=3)   ;
+        //to relay a message as an honest user
+        [r4] i=4 & s=2 & (ii!=4) & !m4 -> PF*1/N: r41: (i'=1) & (s'=4) & (f'=i)
+                                        + PF*1/N: r42: (i'=2) & (s'=4) & (f'=i)
+                                        + PF*1/N: r43: (i'=3) & (s'=4) & (f'=i)
+                                        + PF*1/N: r44: (i'=4) & (s'=4) & (f'=i)
+                                        + 1-PF: d4: (s'=5) & (i'=0) & (f'=0) & (ii'=0) ;
+
+        // if i=4 is a malicious member - send to the dest directly
+        [] msgTo4 & m4 -> 1: d4: (s'=5) & (i'=0) & (f'=0) & (ii'=0) ;
+	
+
+endmodule
+
+
+
+
+

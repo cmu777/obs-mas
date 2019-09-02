@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<!-- $Id: build.xml 4867 2014-07-20 17:52:23Z kredel $ -->
+
+
+<project name="jas" default="usage" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
+
+  <property name="src"       value="src" />
+  <property name="testsrc"   value="trc" />
+  <property name="mpjsrc"    value="mpj/src" />
+  <property name="mpisrc"    value="mpi/src" />
+  <property name="jysrc"     value="jython/src" />
+  <!--property name="jlinalg"   value="../jas-versions/jlinalg_adapter/edu" /-->
+  <!--property name="ACmath"    value="../jas-versions/commons-math_adapter/edu" /-->
+  <property name="bin"       value="edu" />
+  <property name="build"     value="." />
+  <property name="doc"       value="doc/api" />
+  <property name="texdoc"    value="doc/tex" />
+  <property name="test"      value="test" />
+  <property name="jar"       value="jas.jar" />
+
+  <property name="libs"      value="${basedir}/../lib" />
+  <property name="log4j"     value="${libs}/log4j.jar" />
+  <!--property name="log4j"     value="${libs}/mylog.jar" /-->
+  <property name="junit"     value="${libs}/junit.jar" />
+  <property name="jomp"      value="${libs}/jomp1.0b.jar" />
+  <property name="jython"    value="${libs}/jython.jar" />
+  <property name="meditor"   value="${libs}/meditor.jar" />
+  <property name="tnj"       value="${libs}/tnj.jar" />
+  <property name="tex"       value="${libs}/texgen.jar" />
+  <property name="lint"      value="${libs}/lint4j.jar" />
+  <property name="l4j.level" value="3" />
+  <property name="l4j.exact" value="true" />
+
+  <!--property name="cp"       value="${log4j}:${junit}:${tnj}:." /-->
+  <property name="cp"       value="${log4j}:${junit}:." />
+  <!--property name="doccp"    value="${log4j}:${junit}:${tnj}" /-->
+  <property name="doccp"    value="${log4j}:${junit}" />
+  <property name="version"  value="0.1" />
+
+<!--
+  <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
+    <classpath>
+      <pathelement location="${lint}"/>
+    </classpath>
+  </taskdef>
+-->
+
+<!--
+  <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${libs}/jacocoant.jar"/>
+  </taskdef>
+-->
+
+<target name="vorher" >
+  <!-- set properties DSTAMP, TSTAMP -->
+  <tstamp />
+  <mkdir dir="edu/jas"  />
+  <mkdir dir="${test}"  />
+  <mkdir dir="doc"  />
+</target>
+
+<target name="usage" >
+  <echo message="ant &lt;target&gt;"  />
+  <echo message="ant run -Dclass=&lt;class&gt;"  />
+  <echo message="basedir = ${basedir}"  />
+  <echo message="libs = ${libs}"  />
+  <!--echoproperties /-->
+</target>
+
+<target name="recompile" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
+<target name="compile" depends="vorher" >
+  <javac destdir="${build}" 
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}"
+         listfiles="true"
+         includeantruntime="false"
+  >
+     <compilerarg value="-Xlint:unchecked" />
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+<!--     listfiles="true"
+         includes="**/*.java" 
+-->
+</target>
+
+<target name="recomp5" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.5" 
+         target="1.5" 
+         bootclasspath="/usr/lib64/jvm/java-1.5.0/jre/lib/rt.jar"
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
+<target name="recomp6" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.6" 
+         target="1.6" 
+         bootclasspath="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
+<target name="recomp7" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.7" 
+         target="1.7" 
+         bootclasspath="/usr/lib64/jvm/java-1.7.0/jre/lib/rt.jar"
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
+<target name="doc" >
+  <javadoc destdir="${doc}" 
+           classpath="${doccp}" 
+           overview="overview.html" 
+           author="true" 
+           linksource="true" 
+           >
+<!--       
+           private="true" 
+           linksource="true" 
+-->
+     <!--tag name="typeparam" description="Type parameter: " scope="all" /-->
+     <!--tag name="param" /-->
+     <!--tag name="return" /-->
+     <!--tag name="unused"    description="Not used"         scope="all" /-->
+     <!--tag name="todo"      description="To do"            scope="all" /-->
+     <!--tag name="fix"       description="Fix me"           scope="all" /-->
+     <tag name="usage"     description="Usage"            scope="all" />
+     <fileset dir="${src}" includes="**/*.java"  />
+     <fileset dir="${testsrc}" includes="**/*.java"  />
+     <!--fileset dir="${mpjsrc}" includes="**/*.java"  /-->
+     <!--fileset dir="${jysrc}" includes="**/*.java"  /-->
+  </javadoc>
+</target>
+
+
+<target name="texdoc" >
+  <javadoc sourcepath="${src}"  destdir="${texdoc}"
+           classpath="${doccp}" 
+           doclet="TexGen"
+           docletpath="${tex}"
+           verbose="true"
+           >
+     <fileset dir="${src}" includes="**/*.java"  />
+  </javadoc>
+</target>
+
+
+<target name="time" depends="vorher" >
+  <java  classname="edu.jas.poly.PolynomialTimings" 
+         classpath="${cp}" 
+         fork="yes" />
+</target>
+
+<target name="run" depends="compile" >
+  <java  classname="${class}" 
+         classpath="${cp}" 
+         fork="yes" />
+</target>
+
+<target name="testsingle"
+        if="name" 
+        depends="vorher" >
+  <junit printsummary="yes" 
+         fork="no" 
+         showoutput="yes"
+         haltonfailure="no" >
+     <classpath path="${cp}" />
+     <test name="edu.jas.${name}" 
+           outfile="${name}.lst" />
+  </junit>
+</target>
+
+<target name="test" 
+        depends="vorher" >
+  <junit printsummary="yes" 
+         fork="yes" 
+         showoutput="yes"
+         haltonfailure="no" >
+     <jvmarg value="-server"/>
+     <jvmarg value="-Xmx2900M"/>
+     <jvmarg value="-Xms2900M"/>
+     <jvmarg value="-verbose:gc"/>
+     <jvmarg value="-ea"/>
+     <classpath path="${cp}" />
+     <formatter type="plain" /> <!-- plain, xml, brief -->
+     <batchtest todir="${test}" >
+        <fileset dir="${build}">
+          <include name="edu/**/*Test.class"/>
+        </fileset>
+     </batchtest>
+  </junit>
+</target>
+
+<target name="coverage" 
+        depends="vorher" >
+  <jacoco:coverage>
+  <junit printsummary="yes" 
+         fork="yes" 
+         showoutput="yes"
+         haltonfailure="no" >
+     <classpath path="${cp}" />
+     <formatter type="plain" /> <!-- plain, xml, brief -->
+     <batchtest todir="${test}" >
+        <fileset dir="${build}">
+          <include name="edu/**/*Test.class"/>
+        </fileset>
+     </batchtest>
+  </junit>
+  </jacoco:coverage>
+</target>
+
+<target name="exam" depends="compile" >
+  <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.gbufd.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.application.ExamplesGeoTheorems" classpath="${cp}" fork="yes" args="1" />
+</target>
+
+<target name="lint" depends="vorher" >
+  <lint4j sourcepath="${src}" 
+          classpath="${cp}:${jar}"
+          packages="edu.jas.*" 
+          level="${l4j.level}" 
+          exact="${l4j.exact}" >
+  </lint4j>
+</target>
+
+<target name="jdepend" depends="vorher" >
+  <jdepend format="text" 
+           outputfile="test/jdepend-report-${DSTAMP}.out" 
+       >
+      <exclude name="java.*" />
+      <exclude name="javax.*" />
+      <exclude name="org.apache.*" />
+      <exclude name="junit.*" />
+      <exclude name="*Test" /> <!-- not working -->
+      <classespath>
+        <pathelement location="${bin}"/>
+      </classespath>
+  </jdepend>
+</target>
+
+<target name="jacoco" depends="vorher" >
+  <jacoco:report>
+    <executiondata>
+        <file file="jacoco.exec"/>
+    </executiondata>
+    <structure name="Java Algebra System Jacoco Report">
+        <classfiles>
+            <fileset dir="edu"/>
+        </classfiles>
+        <sourcefiles encoding="UTF-8">
+            <fileset dir="src"/>
+            <!--fileset dir="trc"/-->
+        </sourcefiles>
+    </structure>
+    <html destdir="report"/>        
+  </jacoco:report>
+</target>
+
+<target name="jar" depends="vorher" >
+  <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
+     <fileset dir="." includes="**/*.java"  />
+     <fileset dir="." includes="**/*.html"  />
+     <fileset dir="." includes="*.py"  />
+     <fileset dir="." includes="examples/*.py"  />
+     <fileset dir="." includes="examples/*.rb"  />
+     <fileset dir="." includes="**/*.jas"  />
+     <fileset dir="." includes="build.xml Makefile log4j.properties"  />
+  </jar>
+</target>
+<!--
+     <fileset dir="edu/jas" />
+-->
+
+<target name="jar07" depends="vorher" >
+  <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
+     <fileset dir="." includes="**/*.java" excludes="**/ufd/**" />
+     <fileset dir="." includes="**/*.html"  />
+     <fileset dir="." includes="*.py"  />
+     <fileset dir="." includes="examples/*.py"  />
+     <fileset dir="." includes="**/*.jas"  />
+     <fileset dir="." includes="build.xml Makefile log4j.properties"  />
+     <fileset dir="edu/jas" excludes="**/ufd/**" />
+  </jar>
+</target>
+
+<target name="clean" >
+  <delete verbose="true" >
+    <fileset dir="${src}" defaultexcludes="no" includes="**/*~"  />
+    <fileset dir="${testsrc}" defaultexcludes="no" includes="**/*~"  />
+  </delete>
+</target>
+
+<target name="distclean" depends="clean" >
+  <delete verbose="true" >
+    <fileset dir="${src}" includes="**/*.class"  />
+    <fileset dir="${testsrc}" includes="**/*.class"  />
+    <fileset dir="${build}" includes="**/*.class"  />
+  </delete>
+</target>
+
+<target name="untabify" depends="vorher" >
+  <fixcrlf srcdir="${src}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${testsrc}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${mpisrc}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${mpjsrc}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+</target>
+
+<target name="sed-isdone" depends="vorher" >
+  <replace dir="${src}"
+       token="@param C coefficient"
+       value="@typeparam C coefficient"
+       summary="true"
+       >
+    <include name="**/*.java" /> 
+  </replace>
+</target>
+
+</project>
+
+

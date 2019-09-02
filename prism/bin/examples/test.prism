@@ -1,0 +1,71 @@
+ldtmc
+
+//observation from crypt3's view
+observations
+	p1->null, p2->null, h1h2h3->h1h3, h1h2t3->h1t3, h1t2h3->h1h3, 
+	h1t2t3->h1t3, t1h2h3->t1h3, t1h2t3->t1t3, t1t2h3->t1h3,
+	t1t2t3->t1t3, a1->a1, a2->a2, a3->a3, d1->d1, d2->d2, d3->d3
+endobservations
+
+// constants used in renaming (identities of cryptographers)
+const int c1 = 1; const int c2 = 2; const int c3 = 3;
+
+module diningCrypt
+	
+  coin1 :[0..2]; coin2 :[0..2]; coin3 :[0..2];
+  s1 : [0..1]; s2 : [0..1]; s3 : [0..1];
+  agree1 : [0..1]; agree2 : [0..1]; agree3 : [0..1];
+
+  s : [0..1] init 0; // payer is chosen (1) or not (0);
+  payer : [0..3] init 0; // who pays
+
+  // either crypt1 pays or crypt2 pays
+  [] s=0 -> 1/2:p1:(s'=1)&(payer'=c1) + 1/2:p2:(s'=1)&(payer'=c2);
+
+  // flip coin and share value
+  [] s=1 & coin1=0 & coin2=0 & coin3=0 -> 1/8:h1h2h3:(coin1'=1)&(coin2'=1)&(coin3'=1) 
+	    			+ 1/8:h1h2t3:(coin1'=1)&(coin2'=1)&(coin3'=2)
+	    			+ 1/8:h1t2h3:(coin1'=1)&(coin2'=2)&(coin3'=1)
+	    			+ 1/8:h1t2t3:(coin1'=1)&(coin2'=2)&(coin3'=2)
+	    			+ 1/8:t1h2h3:(coin1'=2)&(coin2'=1)&(coin3'=1)
+	    			+ 1/8:t1h2t3:(coin1'=2)&(coin2'=1)&(coin3'=2)
+	    			+ 1/8:t1t2h3:(coin1'=2)&(coin2'=2)&(coin3'=1)
+	    			+ 1/8:t1t2t3:(coin1'=2)&(coin2'=2)&(coin3'=2);
+	
+  // crypt1 agrees (coins the same and does not pay)
+  [] s1=0 & s2=0 & s3=0 & coin1>0 & coin2>0 & coin1=coin2 & (payer!=c1)  
+	    -> 1:a1:(s1'=1) & (agree1'=1);
+  //disagree (coins different and does not pay
+  [] s1=0 & s2=0 & s3=0 & coin1>0 & coin2>0 & coin1!=coin2 & (payer!=c1) -> 1:d1:(s1'=1);
+  //disagree (coins same and pays)
+  [] s1=0 & s2=0 & s3=0 & coin1>0 & coin2>0 & coin1=coin2 & (payer=c1) -> 1:d1:(s1'=1);
+  //agree (coins different and pays)
+  [] s1=0 & s2=0 & s3=0 &coin1>0 & coin2>0 & coin1!=coin2 & (payer=c1) 
+	    -> 1:a1:(s1'=1) & (agree1'=1);
+
+  // crypt2 agrees (coins the same and does not pay)
+  [] s1=1 & s2=0 & s3=0 & coin2>0 & coin3>0 & coin2=coin3 & (payer!=c2) 
+	    -> 1:a2:(s2'=1) & (agree2'=1);
+  //disagree (coins different and does not pay
+  [] s1=1 & s2=0 & s3=0 & coin2>0 & coin3>0 & coin2!=coin3 & (payer!=c2) -> 1:d2:(s2'=1);
+  //disagree (coins same and pays)
+  [] s1=1 & s2=0 & s3=0 & coin2>0 & coin3>0 & coin2=coin3 & (payer=c2) -> 1:d2:(s2'=1);
+  //agree (coins different and pays)
+  [] s1=1 & s2=0 & s3=0 & coin2>0 & coin3>0 & coin2!=coin3 & (payer=c2) 
+	    -> 1:a2:(s2'=1) & (agree2'=1);
+
+  // crypt3 agrees (coins the same)
+  [] s3=0 & coin1>0 & coin3>0 & coin1=coin3 & (payer!=c3) 
+	    -> 1:a3:(s3'=1) & (agree3'=1);
+  // disagree (coins different)
+  [] s3=0 & coin1>0 & coin3>0 & coin1!=coin3 & (payer!=c3) -> 1:d3:(s3'=1);
+  //disagree (coins same and pays)
+  [] s3=0 & coin3>0 & coin3>0 & coin3=coin3 & (payer=c3) -> 1:d3:(s2'=1);
+  //agree (coins different and pays)
+  [] s3=0 & coin3>0 & coin3>0 & coin3!=coin3 & (payer=c3) 
+	    -> 1:a3:(s3'=1) & (agree3'=1);
+	
+endmodule
+
+// label denoting states where protocol has finished
+label "done" = s1=1&s2=1&s3=1;

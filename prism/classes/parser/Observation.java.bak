@@ -1,0 +1,66 @@
+
+package parser;
+
+/**
+ * Variable declaration details
+ */
+public class Observation 
+{
+	// Transition label Name
+	protected String name;
+	// observation of the label
+	protected String observedLbl;
+		
+	public Observation(String name, String observedLbl)
+	{
+		setName(name);
+		setObservedLbl(observedLbl);
+	}
+	
+	// Set methods
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}	
+
+	public void setObservedLbl(String observedLbl)
+	{
+		this.observedLbl = observedLbl;
+	}	
+
+	// Get methods
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public String getObservedLbl()
+	{
+		return observedLbl;
+	}	
+
+	/**
+	 * Convert to string.
+	 */
+	@Override
+	public String toString()
+	{
+		String s  = "";
+		s += name + " -> ";
+		s += observedLbl;
+		return s;
+	}
+
+	/**
+	 * Perform a copy.
+	 */
+	public Observation copy()
+	{
+		Observation ret = new Observation(getName(), getObservedLbl());
+		return ret;
+	}
+}
+
+// ------------------------------------------------------------------------------

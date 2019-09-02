@@ -1,0 +1,26 @@
+pomas
+
+//define the agents, transition label and its observation for each agent, null denotes hidden
+agents
+	x0: a->a, b->b, c->c;
+	x1: a->a, b->null, c->c;
+	x2: a->a, b->null, c->null;
+endagents
+
+
+module opac1
+        s: [0..3] init 0;
+        f: [0..3] init 0; //from
+
+
+        [s0] s=0  -> 1/4: x0: a: (f'=0) & (s'=1)  + 1/4: x0: b: (f'=0) & (s'=2)
+                        + 1/2 :x0: c: (f'=0) & (s'=3) ;
+
+        [s1] s=1  -> 5/8: x1 :a: (f'=1) & (s'=0)  + 1/8: x1: b: (f'=1) & (s'=2)
+                        + 1/4 : x1:c:(f'=1) & (s'=3) ;
+
+        [s2] s=2 -> 1: x2: c: (f'=2) & (s'=3);
+
+        [] s=3 -> true;
+
+endmodule
