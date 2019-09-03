@@ -117,11 +117,15 @@ public abstract class Expression extends ASTElement
 			}
 			
 			// the property for opacity check should be a simple path formula
-			if (expr.getOperator() == ExpressionTemporal.P_O && expr.getOperand2() != null && !(expr.getOperand2().isSimplePathFormula()))  {
+			if (expr.getOperator() == ExpressionTemporal.P_O 
+					&& expr.getOperand2() != null 
+					&& !(expr.getOperand2().isSimplePathFormula()))  {
 				System.out.println("The property for opacity check is not a simple path formula!");
 				return false;
 			}
-			if (!(expr.getOperator() == ExpressionTemporal.P_O) && expr.getOperand2() != null && !(expr.getOperand2().getType() instanceof TypeBool) ) {
+			if (!(expr.getOperator() == ExpressionTemporal.P_O) 
+					&& expr.getOperand2() != null 
+					&& !(expr.getOperand2().getType() instanceof TypeBool) ) {
 				return false;
 			}
 			return true;
