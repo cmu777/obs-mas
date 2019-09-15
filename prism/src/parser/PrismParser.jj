@@ -1213,6 +1213,7 @@ Expression ExpressionTemporalBinary(boolean prop, boolean pathprop) :
 		{ exprTemp = new ExpressionTemporal(); exprTemp.setOperand1(ret); }
 		( <U> { exprTemp.setOperator(ExpressionTemporal.P_U); }
 		| <W> { exprTemp.setOperator(ExpressionTemporal.P_W); }
+		| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
 		| <R> { exprTemp.setOperator(ExpressionTemporal.P_R); } )
 		( TimeBound(exprTemp) )?
 		expr = ExpressionTemporalUnary(prop, pathprop)
@@ -1233,7 +1234,7 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 		{ if (!pathprop) throw generateParseException(); }
 		{ begin = getToken(1); exprTemp = new ExpressionTemporal(); }
 		( <X> { exprTemp.setOperator(ExpressionTemporal.P_X); }
-		| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
+		//| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
 		| <F> { exprTemp.setOperator(ExpressionTemporal.P_F); }
 		| <G> { exprTemp.setOperator(ExpressionTemporal.P_G); } )
 		( TimeBound(exprTemp) )?

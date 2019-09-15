@@ -121,6 +121,10 @@ public abstract class Expression extends ASTElement
 				System.out.println("The property for opacity check is not a simple path formula!");
 				return false;
 			}
+			if (expr.getOperator() == ExpressionTemporal.P_O && expr.getOperand1() != null && !(expr.getOperand1().isAgent()))  {
+				System.out.println("The observer for opacity check is not a valid agent!");
+				return false;
+			}
 			if (!(expr.getOperator() == ExpressionTemporal.P_O) && expr.getOperand2() != null && !(expr.getOperand2().getType() instanceof TypeBool) ) {
 				return false;
 			}
@@ -130,6 +134,7 @@ public abstract class Expression extends ASTElement
 		return false;
 	}
 
+	
 	/**
 	 * Returns {@code true} if this expression is a path formula.
 	 * If {@code allowNestedOperators==false} then we don't allow
@@ -157,6 +162,27 @@ public abstract class Expression extends ASTElement
 			return false;
 		}
 	}
+	
+
+	/**
+	 * Returns {@code true} if this expression is a valid agent.
+	 */
+	public boolean isAgent()
+	{
+		try {
+			if (getType() == null) {
+				this.typeCheck();
+			}
+			if (getType() == TypeAgent.getInstance()) {
+				return true;
+			}
+
+			return false;
+		} catch (PrismLangException e) {
+			return false;
+		}
+	}
+	
 
 	/**
 	 * Convert a property expression (an LTL formula) into the classes used by
@@ -631,8 +657,8 @@ public abstract class Expression extends ASTElement
 		return new ExpressionTemporal(ExpressionTemporal.P_X, null, expr);
 	}
 	
-	public static ExpressionTemporal Opacity(Expression expr) {
-		return new ExpressionTemporal(ExpressionTemporal.P_O, null, expr);
+	public static ExpressionTemporal Opacity(Expression expr1, Expression expr2) {
+		return new ExpressionTemporal(ExpressionTemporal.P_O, expr1, expr2);
 	}
 
 	// Static testers for convenience
@@ -926,7 +952,7 @@ public abstract class Expression extends ASTElement
 				// Until
 				expr = exprTemp;
 			} else if (exprTemp.getOperator() == ExpressionTemporal.P_O) {
-				// Opacity: O \varphi, convert the property \varphi to until form
+				// Opacity: ag O \varphi, convert the property \varphi to until form
 				expr = exprTemp.convertToUntilForm();
 				((ExpressionTemporal) expr).setOpacity();
 			} else {
@@ -974,7 +1000,7 @@ public abstract class Expression extends ASTElement
 		case NEXT:
 			return new ExpressionTemporal(ExpressionTemporal.P_X, null, createFromJltl2ba(ltl.left));
 		case OPACITY:
-			return new ExpressionTemporal(ExpressionTemporal.P_O, null, createFromJltl2ba(ltl.left));
+			return new ExpressionTemporal(ExpressionTemporal.P_O, createFromJltl2ba(ltl.left), createFromJltl2ba(ltl.right));
 		case NOT:
 			return Expression.Not(createFromJltl2ba(ltl.left));
 		case OR:

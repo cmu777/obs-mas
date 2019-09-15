@@ -370,8 +370,9 @@ public class ExpressionTemporal extends Expression
 			return this;
 		case P_O:
 			int op = ((ExpressionTemporal) operand2).getOperator();
+			op1 = ((ExpressionTemporal) operand1).getOperand1();
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
-			exprTemp = new ExpressionTemporal(op, null, op2);
+			exprTemp = new ExpressionTemporal(op, op1, op2);
 			System.out.println("+++++ " + exprTemp.toString());
 			return exprTemp.convertToUntilForm();
 		case P_F:

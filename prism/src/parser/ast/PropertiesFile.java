@@ -462,7 +462,9 @@ public class PropertiesFile extends ASTElement
 	private void doSemanticChecks() throws PrismLangException
 	{
 		PropertiesSemanticCheck visitor = new PropertiesSemanticCheck(this, modelInfo);
+		System.out.println("!!! before semantic check");
 		accept(visitor);
+		System.out.println("!!! after semantic check");
 	}
 
 	/**
@@ -583,6 +585,7 @@ public class PropertiesFile extends ASTElement
 	 */
 	public Object accept(ASTVisitor v) throws PrismLangException
 	{
+		System.out.println("*** prop file accept ***" + this.toString());
 		return v.visit(this);
 	}
 

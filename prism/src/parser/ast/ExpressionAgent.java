@@ -30,13 +30,13 @@ import parser.*;
 import parser.visitor.*;
 import prism.PrismLangException;
 
-public class ExpressionTransitionLabel extends Expression
+public class ExpressionAgent extends Expression
 {
 	String name;
 
 	// Constructor
 	
-	public ExpressionTransitionLabel(String s)
+	public ExpressionAgent(String s)
 	{
 		name = s;
 	}
@@ -84,9 +84,9 @@ public class ExpressionTransitionLabel extends Expression
 	}
 	
 	@Override
-	public ExpressionTransitionLabel deepCopy()
+	public ExpressionAgent deepCopy()
 	{
-		ExpressionTransitionLabel expr = new ExpressionTransitionLabel(name);
+		ExpressionAgent expr = new ExpressionAgent(name);
 		expr.setType(type);
 		expr.setPosition(this);
 		return expr;
@@ -118,7 +118,7 @@ public class ExpressionTransitionLabel extends Expression
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ExpressionTransitionLabel other = (ExpressionTransitionLabel) obj;
+		ExpressionAgent other = (ExpressionAgent) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

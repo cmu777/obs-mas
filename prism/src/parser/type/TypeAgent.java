@@ -30,16 +30,16 @@ package parser.type;
 import parser.ast.ProbTransLabel;
 import prism.PrismLangException;
 
-public class TypeProbTransLabel extends Type 
+public class TypeAgent extends Type 
 {
-	private static TypeProbTransLabel singleton;
+	private static TypeAgent singleton;
 	
 	static
 	{
-		singleton = new TypeProbTransLabel();
+		singleton = new TypeAgent();
 	}
 	
-	private TypeProbTransLabel()
+	private TypeAgent()
 	{		
 	}	
 	
@@ -51,16 +51,16 @@ public class TypeProbTransLabel extends Type
 	@Override
 	public String getTypeString()
 	{
-		return "probTransLabel";
+		return "agent";
 	}
 	
 	@Override
 	public Object defaultValue()
 	{
-		return new TypeProbTransLabel();
+		return new TypeAgent();
 	}
 	
-	public static TypeProbTransLabel getInstance()
+	public static TypeAgent getInstance()
 	{
 		return singleton;
 	}
@@ -68,14 +68,14 @@ public class TypeProbTransLabel extends Type
 	@Override
 	public boolean canAssign(Type type)
 	{
-		return (type instanceof TypeProbTransLabel);
+		return (type instanceof TypeAgent);
 	}
 	
 	@Override
-	public ProbTransLabel castValueTo(Object value) throws PrismLangException
+	public TypeAgent castValueTo(Object value) throws PrismLangException
 	{
-		if (value instanceof TypeProbTransLabel)
-			return (ProbTransLabel) value;
+		if (value instanceof TypeAgent)
+			return (TypeAgent) value;
 		else
 			throw new PrismLangException("Can't convert " + value.getClass() + " to type " + getTypeString());
 	}
