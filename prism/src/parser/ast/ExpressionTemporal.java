@@ -369,6 +369,7 @@ public class ExpressionTemporal extends Expression
 		case P_U:
 			return this;
 		case P_O:
+			// O ag \psi
 			int op = ((ExpressionTemporal) operand2).getOperator();
 			op1 = ((ExpressionTemporal) operand1).getOperand1();
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
