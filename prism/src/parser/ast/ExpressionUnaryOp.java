@@ -37,8 +37,9 @@ public class ExpressionUnaryOp extends Expression
 	public static final int NOT = 1;
 	public static final int MINUS = 2;
 	public static final int PARENTH = 3;
+	public static final int ANGLEBRACKET = 4;
 	// Operator symbols
-	public static final String opSymbols[] = { "", "!", "-", "()" };
+	public static final String opSymbols[] = { "", "!", "-", "()", "<>" };
 
 	// Operator
 	protected int op = 0;
@@ -114,6 +115,8 @@ public class ExpressionUnaryOp extends Expression
 			}
 		case PARENTH:
 			return operand.evaluate(ec);
+		case ANGLEBRACKET:
+			return operand.evaluate(ec);
 		}
 		throw new PrismLangException("Unknown unary operator", this);
 	}
@@ -148,6 +151,8 @@ public class ExpressionUnaryOp extends Expression
 	{
 		if (op == PARENTH)
 			return "(" + operand + ")";
+		else if (op == ANGLEBRACKET)
+			return "<" + operand + ">";
 		else
 			return opSymbols[op] + operand;
 	}

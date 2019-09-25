@@ -172,7 +172,12 @@ public abstract class Expression extends ASTElement
 		}
 	}
 	
-
+	public static boolean isAnglebracket(Expression expr)
+	{
+		return expr instanceof ExpressionUnaryOp
+				&& ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.ANGLEBRACKET;
+	}
+	
 	/**
 	 * Returns {@code true} if this expression is a valid agent.
 	 */
@@ -726,6 +731,7 @@ public abstract class Expression extends ASTElement
 				&& ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.PARENTH;
 	}
 
+	
 	public static boolean isRelOp(Expression expr)
 	{
 		return expr instanceof ExpressionBinaryOp
@@ -931,6 +937,10 @@ public abstract class Expression extends ASTElement
 			ExpressionUnaryOp exprUnary = (ExpressionUnaryOp) expr;
 			// remove parentheses
 			if (exprUnary.getOperator() == ExpressionUnaryOp.PARENTH) {
+				expr = exprUnary.getOperand();
+			}
+			// remove anglebracket
+			else if (exprUnary.getOperator() == ExpressionUnaryOp.ANGLEBRACKET) {
 				expr = exprUnary.getOperand();
 			}
 			// deal with negation

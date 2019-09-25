@@ -1180,7 +1180,7 @@ Expression Expression(boolean prop, boolean pathprop) :
 	{ return ret; }
 }
 
-// Expression: temporal operators, binary (U, W, R) and unary (X, F, G)
+// Expression: temporal operators, binary (U, W, O, R) and unary (X, F, G)
 
 // Note: the potential occurrence of two successive (unseparated) expressions
 // (e.g. "a" and "b" in "F<=a b") is a grammar flaw because the function and
@@ -1213,6 +1213,7 @@ Expression ExpressionTemporalBinary(boolean prop, boolean pathprop) :
 		{ exprTemp = new ExpressionTemporal(); exprTemp.setOperand1(ret); }
 		( <U> { exprTemp.setOperator(ExpressionTemporal.P_U); }
 		| <W> { exprTemp.setOperator(ExpressionTemporal.P_W); }
+		| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
 		| <R> { exprTemp.setOperator(ExpressionTemporal.P_R); } )
 		( TimeBound(exprTemp) )?
 		expr = ExpressionTemporalUnary(prop, pathprop)
@@ -1233,7 +1234,7 @@ Expression ExpressionTemporalUnary(boolean prop, boolean pathprop) :
 		{ if (!pathprop) throw generateParseException(); }
 		{ begin = getToken(1); exprTemp = new ExpressionTemporal(); }
 		( <X> { exprTemp.setOperator(ExpressionTemporal.P_X); }
-		| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
+		//| <O> { exprTemp.setOperator(ExpressionTemporal.P_O); }
 		| <F> { exprTemp.setOperator(ExpressionTemporal.P_F); }
 		| <G> { exprTemp.setOperator(ExpressionTemporal.P_G); } )
 		( TimeBound(exprTemp) )?
@@ -1902,9 +1903,24 @@ Expression ExpressionLabel(boolean prop, boolean pathprop) :
 	{ ret = new ExpressionLabel(s); ret.setPosition(begin, getToken(0)); return ret; }
 }
 
+// (Property) expression: agent (the observer for opacity checking)
+Expression ExpressionAgent(boolean prop, boolean pathprop) :
+{
+	String s;
+	ExpressionAgent ret = null;
+	Token begin;
+}
+{
+	// This production is only allowed in expressions if the "prop" parameter is true
+	{ if (!prop) throw generateParseException(); }
+	// << ag >>
+	( begin = <DLT> ( s=Identifier() ) <DGT> )
+	{ ret = new ExpressionAgent(s); ret.setPosition(begin, getToken(0)); return ret; }
+}
+
 // transition label
 
-Expression ExpressionTransitionLabel(boolean prop, boolean pathprop) :
+/*Expression ExpressionTransitionLabel(boolean prop, boolean pathprop) :
 {
 	String s;
 	ExpressionTransitionLabel ret = null;
@@ -1915,7 +1931,7 @@ Expression ExpressionTransitionLabel(boolean prop, boolean pathprop) :
 	{ if (!prop) throw generateParseException(); }
 	( s=Identifier() )
 	{ ret = new ExpressionTransitionLabel(s); return ret; }
-}
+}*/
 
 // (Property) expression: filter (using "filter" keyword)
 
