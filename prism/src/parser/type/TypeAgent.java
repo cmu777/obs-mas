@@ -27,25 +27,25 @@
 
 package parser.type;
 
-import parser.ast.ProbTransLabel;
 import prism.PrismLangException;
 
 public class TypeAgent extends Type 
 {
 	private static TypeAgent singleton;
 	
+	
 	static
 	{
 		singleton = new TypeAgent();
 	}
 	
-	private TypeAgent()
+	public TypeAgent()
 	{		
 	}	
 	
 	public boolean equals(Object o)
 	{
-		return (o instanceof TypeDouble);
+		return (o instanceof TypeAgent);
 	}
 	
 	@Override

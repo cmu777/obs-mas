@@ -45,7 +45,8 @@ public class ExpressionTemporal extends Expression
 	public static final int R_F = 13; // Reachability (for R operator) // DEPRECATED: Use P_F
 	public static final int R_S = 14; // Steady-state (for R operator)
 	// Operator symbols
-	public static final String opSymbols[] = { "", "X", "U", "F", "G", "W", "R", "O", "", "", "", "C", "I", "F", "S" };
+	public static final String opSymbols[] = { "", "X", "U", "F", "G", "W", "R", 
+		"O", "", "", "", "C", "I", "F", "S" };
 
 	// Operator
 	protected int op = 0;
@@ -371,7 +372,7 @@ public class ExpressionTemporal extends Expression
 		case P_O:
 			// O ag \psi
 			int op = ((ExpressionTemporal) operand2).getOperator();
-			op1 = ((ExpressionTemporal) operand1).getOperand1();
+			op1 = operand1.deepCopy();
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
 			exprTemp = new ExpressionTemporal(op, op1, op2);
 			System.out.println("+++++ " + exprTemp.toString());

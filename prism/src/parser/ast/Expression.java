@@ -111,23 +111,26 @@ public abstract class Expression extends ASTElement
 		// Otherwise, must be a temporal operator.
 		else if (this instanceof ExpressionTemporal) {
 			ExpressionTemporal expr = (ExpressionTemporal) this;
+			//System.out.println("simple path " + expr.getOperand1().toString());
 			// And children, if present, must be state (not path) formulas
-			if (expr.getOperand1() != null && !(expr.getOperand1().getType() instanceof TypeBool)) {
-				return false;
-			}
-			
-			// the property for opacity check should be a simple path formula
-			if (expr.getOperator() == ExpressionTemporal.P_O 
-					&& expr.getOperand2() != null 
-					&& !(expr.getOperand2().isSimplePathFormula()))  {
-				System.out.println("The property for opacity check is not a simple path formula!");
+			if (expr.getOperator() != ExpressionTemporal.P_O 
+					&& expr.getOperand1() != null  
+					&& !(expr.getOperand1().getType() instanceof TypeBool) ) {
 				return false;
 			}
 
 			if (expr.getOperator() == ExpressionTemporal.P_O 
 					&& expr.getOperand1() != null 
 					&& !(expr.getOperand1().isAgent()))  {
-				System.out.println("The observer for opacity check is not a valid agent!");
+				System.out.println("The observer for opacity check is not a valid agent!" + expr.getOperand1().getType());
+				return false;
+			}
+
+			// the property for opacity check should be a simple path formula
+			if (expr.getOperator() == ExpressionTemporal.P_O 
+					&& expr.getOperand2() != null 
+					&& !(expr.getOperand2().isSimplePathFormula()))  {
+				System.out.println("The property for opacity check is not a simple path formula!");
 				return false;
 			}
 
@@ -172,11 +175,11 @@ public abstract class Expression extends ASTElement
 		}
 	}
 	
-	public static boolean isAnglebracket(Expression expr)
+	/*public static boolean isAnglebracket(Expression expr)
 	{
 		return expr instanceof ExpressionUnaryOp
 				&& ((ExpressionUnaryOp) expr).getOperator() == ExpressionUnaryOp.ANGLEBRACKET;
-	}
+	}*/
 	
 	/**
 	 * Returns {@code true} if this expression is a valid agent.
@@ -187,7 +190,7 @@ public abstract class Expression extends ASTElement
 			if (getType() == null) {
 				this.typeCheck();
 			}
-			if (getType() == TypeAgent.getInstance()) {
+			if (getType().equals( TypeAgent.getInstance() )) {
 				return true;
 			}
 
@@ -971,7 +974,7 @@ public abstract class Expression extends ASTElement
 				// Until
 				expr = exprTemp;
 			} else if (exprTemp.getOperator() == ExpressionTemporal.P_O) {
-				// Opacity: ag O \varphi, convert the property \varphi to until form
+				// Opacity: <ag> O \varphi, convert the property \varphi to until form
 				expr = exprTemp.convertToUntilForm();
 				((ExpressionTemporal) expr).setOpacity();
 			} else {

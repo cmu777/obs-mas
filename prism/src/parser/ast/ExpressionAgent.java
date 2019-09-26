@@ -27,6 +27,7 @@
 package parser.ast;
 
 import parser.*;
+import parser.type.Type;
 import parser.visitor.*;
 import prism.PrismLangException;
 
@@ -40,6 +41,12 @@ public class ExpressionAgent extends Expression
 	{
 		name = s;
 	}
+	
+	public ExpressionAgent(String n, Type t)
+	{
+		setType(t);
+		name = n;
+	}
 
 	// Get Method
 	
@@ -49,7 +56,6 @@ public class ExpressionAgent extends Expression
 	}
 
 	// Methods required for Expression:
-	
 	@Override
 	public boolean isConstant()
 	{
@@ -97,7 +103,7 @@ public class ExpressionAgent extends Expression
 	@Override
 	public String toString()
 	{
-		return "\"" + name + "\"";
+		return "<" + name + ">";
 	}
 
 	@Override

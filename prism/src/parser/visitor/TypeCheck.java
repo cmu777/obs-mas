@@ -176,7 +176,6 @@ public class TypeCheck extends ASTTraverse
 		}
 		switch (e.getOperator()) {
 		case ExpressionTemporal.P_X:
-		case ExpressionTemporal.P_O:
 		case ExpressionTemporal.P_U:
 		case ExpressionTemporal.P_F:
 		case ExpressionTemporal.P_G:
@@ -198,6 +197,22 @@ public class TypeCheck extends ASTTraverse
 		case ExpressionTemporal.R_I:
 		case ExpressionTemporal.R_S:
 			e.setType(TypePathDouble.getInstance());
+			break;
+
+		case ExpressionTemporal.P_O:
+			if (e.getOperand1() != null) {
+				type = e.getOperand1().getType();
+				System.out.println("type agent :: " + (type instanceof TypeAgent));
+				if (type==null || !(type instanceof TypeAgent) )
+					throw new PrismLangException("Type error: Left argument of " + e.getOperatorSymbol() 
+							+ " operator is not an Agent", e.getOperand1());
+			}
+			if (e.getOperand2() != null) {
+				type = e.getOperand2().getType();
+				if (!(type instanceof TypeBool) && !(type instanceof TypePathBool))
+					throw new PrismLangException("Type error: Right argument of " + e.getOperatorSymbol() + " operator is not Boolean", e.getOperand2());
+			}
+			e.setType(TypePathBool.getInstance());
 			break;
 		}
 	}

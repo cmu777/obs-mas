@@ -1464,6 +1464,8 @@ Expression ExpressionBasic(boolean prop, boolean pathprop) :
 	|
 		ret = ExpressionStrategy(prop, pathprop)
 	|
+		ret = ExpressionAgent(prop, pathprop)
+	|
 		ret = ExpressionLabel(prop, pathprop)
 	|
 		ret = ExpressionFilter(prop, pathprop)
@@ -1581,6 +1583,22 @@ Expression ExpressionParenth(boolean prop, boolean pathprop) :
 {
 	begin = <LPARENTH> expr = Expression(prop, pathprop) <RPARENTH>
 	{ ret = new ExpressionUnaryOp(ExpressionUnaryOp.PARENTH, expr); ret.setPosition(begin, getToken(0)); return ret;}
+}
+
+// (Property) expression: agent (the observer for opacity checking)
+Expression ExpressionAgent(boolean prop, boolean pathprop) :
+{
+	String s;
+	ExpressionAgent ret = null;
+	Token begin = null;
+	TypeAgent t;
+}
+{
+	// This production is only allowed in expressions if the "prop" parameter is true
+	{ if (!prop) throw generateParseException(); }
+	// <ag>
+	( begin = <LT> ( s=Identifier() ) <GT> )
+	{ t = new TypeAgent(); ret = new ExpressionAgent(s,t); ret.setPosition(begin, getToken(0)); return ret; }
 }
 
 //-----------------------------------------------------------------------------------
@@ -1903,20 +1921,7 @@ Expression ExpressionLabel(boolean prop, boolean pathprop) :
 	{ ret = new ExpressionLabel(s); ret.setPosition(begin, getToken(0)); return ret; }
 }
 
-// (Property) expression: agent (the observer for opacity checking)
-Expression ExpressionAgent(boolean prop, boolean pathprop) :
-{
-	String s;
-	ExpressionAgent ret = null;
-	Token begin;
-}
-{
-	// This production is only allowed in expressions if the "prop" parameter is true
-	{ if (!prop) throw generateParseException(); }
-	// << ag >>
-	( begin = <DLT> ( s=Identifier() ) <DGT> )
-	{ ret = new ExpressionAgent(s); ret.setPosition(begin, getToken(0)); return ret; }
-}
+
 
 // transition label
 

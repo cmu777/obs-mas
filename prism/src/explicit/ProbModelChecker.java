@@ -628,8 +628,10 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		System.out.println("checking prob path formula simple |||| " + expr.toString());
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
-		System.out.println("checking prob path formula simple |||| " + expr.toString());
+		System.out.println("checking prob path formula simple ///// " + expr.toString());
 
+		System.out.println("@@@@@@@@@@@@@@@@@@@@ expr type: " + expr.getType());
+		
 		// Negation
 		if (expr instanceof ExpressionUnaryOp &&
 		    ((ExpressionUnaryOp)expr).getOperator() == ExpressionUnaryOp.NOT) {
@@ -643,6 +645,7 @@ public class ProbModelChecker extends NonProbModelChecker
  			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
 			System.out.println("checking prob path formula simple 222 " + expr.toString());
 
+			
 			// Opacity
 			if (exprTemp.isOpacity()) {
 				System.out.println("checkProbPathFormulaSimple ....!!! " + expr.toString());
