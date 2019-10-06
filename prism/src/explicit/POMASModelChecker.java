@@ -484,7 +484,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 		timer = System.currentTimeMillis();
 
-		System.out.println("\nprobsProp !!! = " + probsProp.valuesL[0].toString());
+		System.out.println("\n\n\nprobsProp !!! = " + probsProp.valuesL[0].toString());
 		System.out.println("probsNegProp !!! = " + probsNegProp.valuesL[0].toString());
 
 		// Store num states
@@ -501,10 +501,10 @@ public class POMASModelChecker extends ProbModelChecker
 			for (int j=0; j<traces.size(); j++) {
 				ProbTransLabel t = traces.get(j);
 				boolean find = false;
-				//System.out.println("\nt...." + t.getObservation().toString());
+				System.out.println("\nt....££££££" + t.getObservation().toString());
 				for (int k=0; k<negTraces.size(); k++) {
 					ProbTransLabel t1 = negTraces.get(k);
-					//System.out.println("t1...." + t1.getObservation().toString());
+					System.out.println("££££££....t1...." + t1.getObservation().toString());
 					//if (t.getValue() > 0.0 & t1.getValue() > 0.0 & t.getObservation().equals(t1.getObservation()) )  {
 					if (t.getValue() > 0.0 & t1.getValue() > 0.0 & 
 							Pattern.matches(t1.getObservation(), t.getObservation()) )  {

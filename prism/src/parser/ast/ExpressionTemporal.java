@@ -53,6 +53,7 @@ public class ExpressionTemporal extends Expression
 	// Up to two operands (either may be null)
 	protected Expression operand1 = null; // LHS of operator
 	protected Expression operand2 = null; // RHS of operator
+	protected String observer = null;
 	// Optional (time) bounds
 	protected Expression lBound = null; // None if null, i.e. zero
 	protected Expression uBound = null; // None if null, i.e. infinity
@@ -76,11 +77,24 @@ public class ExpressionTemporal extends Expression
 		this.operand2 = operand2;
 	}
 
+	public ExpressionTemporal(int op, Expression operand1, Expression operand2, String obs)
+	{
+		this.op = op;
+		this.operand1 = operand1;
+		this.operand2 = operand2;
+		this.observer = obs;
+	}
+	
 	// Set methods
 	
 	public void setOpacity()
 	{
 		isOpacity = true;
+	}
+	
+	public void setObserver(String obs)
+	{
+		observer  = obs;
 	}
 
 	public void setOperator(int i)
@@ -155,6 +169,11 @@ public class ExpressionTemporal extends Expression
 		return op;
 	}
 
+	public String getObserver()
+	{
+		return observer;
+	}
+	
 	public String getOperatorSymbol()
 	{
 		return opSymbols[op];
@@ -273,6 +292,8 @@ public class ExpressionTemporal extends Expression
 	public String toString()
 	{
 		String s = "";
+		if (observer !=null)
+			s += "<" + observer + "> ";
 		if (operand1 != null)
 			s += operand1 + " ";
 		s += opSymbols[op];
@@ -335,6 +356,11 @@ public class ExpressionTemporal extends Expression
 			return false;
 		if (op != other.op)
 			return false;
+		if (observer == null) {
+			if (other.observer != null)
+				return false;
+		} else if (!observer.equals(other.observer))
+			return false;
 		if (operand1 == null) {
 			if (other.operand1 != null)
 				return false;
@@ -363,6 +389,7 @@ public class ExpressionTemporal extends Expression
 	public Expression convertToUntilForm() throws PrismLangException
 	{
 		Expression op1, op2;
+		String observer;
 		ExpressionTemporal exprTemp = null;
 		switch (op) {
 		case P_X:
@@ -373,9 +400,11 @@ public class ExpressionTemporal extends Expression
 			// O ag \psi
 			int op = ((ExpressionTemporal) operand2).getOperator();
 			op1 = operand1.deepCopy();
+			observer = op1.toString();
+			observer = observer.substring(1, observer.length()-1);
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
-			exprTemp = new ExpressionTemporal(op, op1, op2);
-			System.out.println("+++++ " + exprTemp.toString());
+			exprTemp = new ExpressionTemporal(op, op1, op2, observer);
+			System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver());
 			return exprTemp.convertToUntilForm();
 		case P_F:
 			// F a == true U a

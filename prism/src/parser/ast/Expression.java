@@ -975,8 +975,11 @@ public abstract class Expression extends ASTElement
 				expr = exprTemp;
 			} else if (exprTemp.getOperator() == ExpressionTemporal.P_O) {
 				// Opacity: <ag> O \varphi, convert the property \varphi to until form
-				expr = exprTemp.convertToUntilForm();
 				((ExpressionTemporal) expr).setOpacity();
+				String observer = exprTemp.getOperand1().toString();
+				((ExpressionTemporal) expr).setObserver(observer.substring(1, observer.length()-1));
+				System.out.println("$$$$$ " + ((ExpressionTemporal) expr).getObserver() + "$$$$$$$$");
+				expr = exprTemp.convertToUntilForm();
 			} else {
 				// other operators: convert
 				expr = exprTemp.convertToUntilForm();
