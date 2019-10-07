@@ -690,7 +690,7 @@ public class ProbModelChecker extends NonProbModelChecker
 	protected StateValues checkProbOpacity(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Model check operands for all states
-		//System.out.println("%%%%% checkProbOpacity.expr:" + expr.getOperand2().toString() + ": " + expr.getOperatorSymbol());
+		System.out.println("%%%%% checkProbOpacity.expr:" + expr.getOperand2().toString() + ": " + expr.getObserver());
 		StateValues probsProp = new StateValues();
 		if (expr.getOperator() == ExpressionTemporal.P_X) {
 			probsProp  = checkProbNext(model, expr, minMax, statesOfInterest);

@@ -1687,7 +1687,7 @@ public class StateValues implements StateVector
 						String sn = ss[0];
 						String sp = ss[1];
 						ArrayList<ProbTransLabel> sl = new ArrayList<ProbTransLabel>();
-						sl.add(new ProbTransLabel(sn, sn, sn, Double.parseDouble(sp)));
+						sl.add(new ProbTransLabel(sn, sn, sn, sn, Double.parseDouble(sp)));
 						ProbTraceList l = new ProbTraceList(sl, Double.parseDouble(sp));
 						setProbTraceListValue(count, l);
 					}

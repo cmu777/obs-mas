@@ -71,7 +71,7 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 		Iterator<Entry<Integer, Double>> i = distr.iterator();
 		while (i.hasNext()) {
 			Map.Entry<Integer, Double> e = i.next();
-			ProbTransLabel l = new ProbTransLabel(null, null, null, e.getValue());
+			ProbTransLabel l = new ProbTransLabel(null, null, null, null, e.getValue());
 			add(e.getKey(), l);
 		}
 	}
@@ -151,7 +151,9 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 			map.remove(j);
 		else 
 		{
-			ProbTransLabel probLabel = new ProbTransLabel(map.get(j).getAgent(), map.get(j).getAction(), map.get(j).getObservation(), prob);
+			ProbTransLabel probLabel = 
+					new ProbTransLabel(map.get(j).getAgent(), map.get(j).getObserver(), 
+							map.get(j).getAction(), map.get(j).getObservation(), prob);
 			map.put(j, probLabel);
 		}
 	}
@@ -173,7 +175,7 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 	{
 		ProbTransLabel d;
 		d = (ProbTransLabel) map.get(j);
-		return d == null ? new ProbTransLabel(null, null, null, 0.0) : d;
+		return d == null ? new ProbTransLabel(null, null, null, null, 0.0) : d;
 	}
 
 	/**
@@ -249,7 +251,7 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 	 */
 	public ProbTransLabel sum()
 	{
-		ProbTransLabel d = new ProbTransLabel(null, null, null, 0);
+		ProbTransLabel d = new ProbTransLabel(null, null, null, null, 0);
 		Iterator<Entry<Integer, ProbTransLabel>> i = iterator();
 		if (i.hasNext()) d = i.next().getValue();
 		while (i.hasNext()) {
@@ -264,7 +266,7 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 	 */
 	public ProbTransLabel sumAllBut(int j)
 	{
-		ProbTransLabel d = new ProbTransLabel(null, null, null, 0);
+		ProbTransLabel d = new ProbTransLabel(null, null, null, null, 0);
 		Iterator<Entry<Integer, ProbTransLabel>> i = iterator();
 		if (i.hasNext()) d = i.next().getValue();
 		while (i.hasNext()) {

@@ -61,9 +61,9 @@ public class ProbTraceList extends ASTElement
 		return this.states;
 	}
 	
-	public void addTransition(double prob, String agent, String label, String obs)
+	public void addTransition(double prob, String agent, String observer, String label, String obs)
 	{
-		ProbTransLabel trace = new ProbTransLabel(agent, label, obs, prob);
+		ProbTransLabel trace = new ProbTransLabel(agent, observer, label, obs, prob);
 		this.traceList.add(trace);
 	}
 	

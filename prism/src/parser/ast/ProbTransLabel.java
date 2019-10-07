@@ -13,6 +13,7 @@ public class ProbTransLabel extends ASTElement
 	protected double value = 0.0;
 	// agent of the transition label (action)
 	protected String agent = "";
+	protected String observer = "";
 	// name of the transition label (action)
 	protected String action = "";
 	protected String observation = "";
@@ -24,9 +25,10 @@ public class ProbTransLabel extends ASTElement
 		setValue(v);
 	}
 	
-	public ProbTransLabel(String a, String l, String o, double v)
+	public ProbTransLabel(String a, String observer, String l, String o, double v)
 	{
 		setAgent(a);
+		setObserver(observer);
 		setAction(l);
 		setValue(v);
 		setObservation(o);
@@ -48,6 +50,11 @@ public class ProbTransLabel extends ASTElement
 	{
 		this.value = v;
 	}	
+
+	public void setObserver(String o)
+	{
+		this.observer = o;
+	}
 	
 	public void setObservation(String o)
 	{
@@ -70,6 +77,11 @@ public class ProbTransLabel extends ASTElement
 	{
 		return value;
 	}	
+	
+	public String getObserver()
+	{
+		return observer;
+	}
 	
 	public String getObservation()
 	{
@@ -110,6 +122,7 @@ public class ProbTransLabel extends ASTElement
 		String s  = "";
 		s += value + ":";
 		s += agent + ".";
+		s += observer;
 		s += action;
 		s += "->" + observation;
 		return s;
@@ -121,7 +134,7 @@ public class ProbTransLabel extends ASTElement
 	@Override
 	public ASTElement deepCopy()
 	{
-		ProbTransLabel ret = new ProbTransLabel(getAgent(), getAction(), getObservation(), getValue());
+		ProbTransLabel ret = new ProbTransLabel(getAgent(), getObserver(), getAction(), getObservation(), getValue());
 		ret.setPosition(this);
 		return ret;
 	}

@@ -404,7 +404,8 @@ public class ExpressionTemporal extends Expression
 			observer = observer.substring(1, observer.length()-1);
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
 			exprTemp = new ExpressionTemporal(op, op1, op2, observer);
-			System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver());
+			System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver()
+					+ " +++ "  + exprTemp.isOpacity());
 			return exprTemp.convertToUntilForm();
 		case P_F:
 			// F a == true U a

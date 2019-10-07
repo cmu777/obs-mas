@@ -189,7 +189,7 @@ public class POMASModelChecker extends ProbModelChecker
 		return rewards;
 	}
 	
-	public ModelCheckerResult computeInstantaneousRewards(POMAS POMAS, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeInstantaneousRewards(POMAS pomas, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -198,7 +198,7 @@ public class POMASModelChecker extends ProbModelChecker
 		int right = (int) t;
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Start backwards transient computation
 		timer = System.currentTimeMillis();
@@ -215,7 +215,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// Start iterations
 		for (iters = 0; iters < right; iters++) {
 			// Matrix-vector multiply
-			POMAS.mvMult(soln, soln2, null, false);
+			pomas.mvMult(soln, soln2, null, false);
 			// Swap vectors for next iter
 			tmpsoln = soln;
 			soln = soln2;
@@ -237,7 +237,7 @@ public class POMASModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	public ModelCheckerResult computeCumulativeRewards(POMAS POMAS, MCRewards mcRewards, double t) throws PrismException
+	public ModelCheckerResult computeCumulativeRewards(POMAS pomas, MCRewards mcRewards, double t) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int i, n, iters;
@@ -246,7 +246,7 @@ public class POMASModelChecker extends ProbModelChecker
 		int right = (int) t;
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Start backwards transient computation
 		timer = System.currentTimeMillis();
@@ -259,7 +259,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// Start iterations
 		for (iters = 0; iters < right; iters++) {
 			// Matrix-vector multiply plus adding rewards
-			POMAS.mvMult(soln, soln2, null, false);
+			pomas.mvMult(soln, soln2, null, false);
 			for (i = 0; i < n; i++) {
 				soln2[i] += mcRewards.getStateReward(i);
 			}
@@ -284,7 +284,7 @@ public class POMASModelChecker extends ProbModelChecker
 		return res;
 	}
 
-	public ModelCheckerResult computeTotalRewards(POMAS POMAS, MCRewards mcRewards) throws PrismException
+	public ModelCheckerResult computeTotalRewards(POMAS pomas, MCRewards mcRewards) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int n, numBSCCs = 0;
@@ -297,14 +297,14 @@ public class POMASModelChecker extends ProbModelChecker
 		}
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Start total rewards computation
 		timer = System.currentTimeMillis();
 		mainLog.println("\nStarting total reward computation...");
 
 		// Compute bottom strongly connected components (BSCCs)
-		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, POMAS);
+		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, pomas);
 		sccComputer.computeBSCCs();
 		List<BitSet> bsccs = sccComputer.getBSCCs();
 		numBSCCs = bsccs.size();
@@ -323,7 +323,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.print("States in non-zero reward BSCCs: " + bsccsNonZero.cardinality());
 		
 		// Find states with infinite reward (those reach a non-zero reward BSCC with prob > 0)
-		BitSet inf = prob0(POMAS, null, bsccsNonZero);
+		BitSet inf = prob0(pomas, null, bsccsNonZero);
 		inf.flip(0, n);
 		int numInf = inf.cardinality();
 		mainLog.println(", inf=" + numInf + ", maybe=" + (n - numInf));
@@ -332,7 +332,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// (do this using the functions for "reward reachability" properties but with no targets)
 		switch (linEqMethod) {
 		case POWER:
-			res = computeReachRewardsValIter(POMAS, mcRewards, new BitSet(), inf, null, null);
+			res = computeReachRewardsValIter(pomas, mcRewards, new BitSet(), inf, null, null);
 			break;
 		default:
 			throw new PrismException("Unknown linear equation solution method " + linEqMethod.fullName());
@@ -353,9 +353,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Compute steady-state probability distribution (forwards).
 	 * Start from initial state (or uniform distribution over multiple initial states).
 	 */
-	public StateValues doSteadyState(POMAS POMAS) throws PrismException
+	public StateValues doSteadyState(POMAS pomas) throws PrismException
 	{
-		return doSteadyState(POMAS, (StateValues) null);
+		return doSteadyState(pomas, (StateValues) null);
 	}
 
 	/**
@@ -363,10 +363,10 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Optionally, use the passed in file initDistFile to give the initial probability distribution (time 0).
 	 * If null, start from initial state (or uniform distribution over multiple initial states).
 	 */
-	public StateValues doSteadyState(POMAS POMAS, File initDistFile) throws PrismException
+	public StateValues doSteadyState(POMAS pomas, File initDistFile) throws PrismException
 	{
-		StateValues initDist = readDistributionFromFile(initDistFile, POMAS);
-		return doSteadyState(POMAS, initDist);
+		StateValues initDist = readDistributionFromFile(initDistFile, pomas);
+		return doSteadyState(pomas, initDist);
 	}
 
 	/**
@@ -378,11 +378,11 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param initDist Initial distribution (will be overwritten)
 	 */
-	public StateValues doSteadyState(POMAS POMAS, StateValues initDist) throws PrismException
+	public StateValues doSteadyState(POMAS pomas, StateValues initDist) throws PrismException
 	{
-		StateValues initDistNew = (initDist == null) ? buildInitialDistribution(POMAS) : initDist;
-		ModelCheckerResult res = computeSteadyStateProbs(POMAS, initDistNew.getDoubleArray());
-		return StateValues.createFromDoubleArray(res.soln, POMAS);
+		StateValues initDistNew = (initDist == null) ? buildInitialDistribution(pomas) : initDist;
+		ModelCheckerResult res = computeSteadyStateProbs(pomas, initDistNew.getDoubleArray());
+		return StateValues.createFromDoubleArray(res.soln, pomas);
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param k Time step
 	 * @param initDist Initial distribution (will be overwritten)
 	 */
-	public StateValues doTransient(POMAS POMAS, int k, double initDist[]) throws PrismException
+	public StateValues doTransient(POMAS pomas, int k, double initDist[]) throws PrismException
 	{
 		throw new PrismNotSupportedException("Not implemented yet");
 	}
@@ -408,7 +408,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeNextProbs(POMAS POMAS, BitSet target) throws PrismException
+	public ModelCheckerResult computeNextProbs(POMAS pomas, BitSet target) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -419,14 +419,14 @@ public class POMASModelChecker extends ProbModelChecker
 		timer = System.currentTimeMillis();
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create/initialise solution vector(s)
 		soln = Utils.bitsetToDoubleArray(target, n);
 		soln2 = new double[n];
 
 		// Next-step probabilities 
-		POMAS.mvMult(soln, soln2, null, false);
+		pomas.mvMult(soln, soln2, null, false);
 		
 		// Return results
 		res = new ModelCheckerResult();
@@ -438,11 +438,11 @@ public class POMASModelChecker extends ProbModelChecker
 		// Determine set of states actually need to compute traces for
 		BitSet unknown = new BitSet();
 		unknown.set(0, n);
-		pre = POMAS.getPredecessorRelation(this, true);
+		pre = pomas.getPredecessorRelation(this, true);
 
 		//System.out.println("Unknown :: " + unknown.toString());
 		// Compute probabilistic labeled traces for satisfying states
-		computeTraces(POMAS, unknown, unknown, target, pre, n, res.solnWithLabels);
+		computeTraces(pomas, unknown, unknown, target, pre, n, res.solnWithLabels);
 
 		// Finished probabilistic reachability
 		timer = System.currentTimeMillis() - timer;
@@ -456,10 +456,10 @@ public class POMASModelChecker extends ProbModelChecker
 		// Compute probabilistic labeled traces for deadlocks (all terminating traces)
 		// for the purpose of computing negation of the traces
 		unknown.set(0, n);
-		BitSet deadlocks = POMAS.getDeadlockStatesList().valuesB;
+		BitSet deadlocks = pomas.getDeadlockStatesList().valuesB;
 		res.solnDeadlocks = new ProbTraceList[n];
 		// Compute probabilistic labeled traces for all terminating states
-		computeTraces(POMAS, unknown, unknown, deadlocks, pre, n, res.solnDeadlocks);
+		computeTraces(pomas, unknown, unknown, deadlocks, pre, n, res.solnDeadlocks);
 
 		//System.out.println("!!!!!!!!!!!! +  res.solnDeadlocks = " + res.solnDeadlocks[0].toString());
 		/////
@@ -475,7 +475,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeOpacityProbs(POMAS POMAS, StateValues probsProp, StateValues probsNegProp) throws PrismException
+	public ModelCheckerResult computeOpacityProbs(POMAS pomas, StateValues probsProp, StateValues probsNegProp) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		int n;
@@ -488,7 +488,7 @@ public class POMASModelChecker extends ProbModelChecker
 		System.out.println("probsNegProp !!! = " + probsNegProp.valuesL[0].toString());
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 		solnWithLabels = probsProp.valuesL;
 		solnNegWithLabels = probsNegProp.valuesL;
 		solnWithLabels2 = new ProbTraceList[n];
@@ -543,20 +543,20 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param a the set of states labeled with a
 	 * @param x the value vector
 	 */
-	protected double[] computeRestrictedNext(POMAS POMAS, BitSet a, double[] x)
+	protected double[] computeRestrictedNext(POMAS pomas, BitSet a, double[] x)
 	{
 		double[] soln;
 		int n;
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// initialized to 0.0
 		soln = new double[n];
 
 		// Next-step probabilities multiplication
 		// restricted to a states
-		POMAS.mvMult(x, soln, a, false);
+		pomas.mvMult(x, soln, a, false);
 
 		return soln;
 	}
@@ -567,9 +567,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeReachProbs(POMAS POMAS, BitSet target) throws PrismException
+	public ModelCheckerResult computeReachProbs(POMAS pomas, BitSet target) throws PrismException
 	{
-		return computeReachProbs(POMAS, null, target, null, null);
+		return computeReachProbs(pomas, null, target, null, null);
 	}
 
 	/**
@@ -580,9 +580,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeUntilProbs(POMAS POMAS, BitSet remain, BitSet target) throws PrismException
+	public ModelCheckerResult computeUntilProbs(POMAS pomas, BitSet remain, BitSet target) throws PrismException
 	{
-		return computeReachProbs(POMAS, remain, target, null, null);
+		return computeReachProbs(pomas, remain, target, null, null);
 	}
 
 	/**
@@ -739,7 +739,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Compute reachability/until traces.
 	 * i.e. compute the trace of reaching a state in {@code target},
 	 * while remaining in those in {@code remain}.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param unknownA set of states actually needed for computing
 	 * @param target Target states
@@ -747,18 +747,18 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param n The number of the states
 	 * @param soln Result trace list 
 	 */
-	public void computeTraces(POMAS POMAS, BitSet remain, BitSet unknown, BitSet target, 
+	public void computeTraces(POMAS pomas, BitSet remain, BitSet unknown, BitSet target, 
 			PredecessorRelation pre, int n, ProbTraceList[] soln)
 	{
 		for (int s : new IterableStateSet(unknown, n, false)) {
 			ArrayList<ProbTransLabel> traces = new ArrayList<ProbTransLabel>();
 			for (int t : new IterableStateSet(target, n, false)) {
 				ProbTraceList visited = new ProbTraceList(n);
-				ProbTransLabel tl = new ProbTransLabel("", "", "", 0.0);
+				ProbTransLabel tl = new ProbTransLabel("", "", "", "", 0.0);
 				BitSet tmpTarget = new BitSet();
 				tmpTarget.set(t);
 				BitSet canReachTarget = pre.calculatePreStar(remain, tmpTarget, tmpTarget);
-				tl = POMAS.computeProbLabeledTrace(s, tl, canReachTarget, t, visited);
+				tl = pomas.computeProbLabeledTrace(s, tl, canReachTarget, t, visited);
 				if (tl.getValue() > 0.0) traces.add(tl);
 			}
 			soln[s] = new ProbTraceList(traces);
@@ -776,7 +776,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param pre The predecessor relation
 	 */
-	public BitSet prob0(POMAS POMAS, BitSet remain, BitSet target, PredecessorRelation pre)
+	public BitSet prob0(POMAS pomas, BitSet remain, BitSet target, PredecessorRelation pre)
 	{
 		BitSet canReachTarget, result;
 		long timer;
@@ -786,8 +786,8 @@ public class POMASModelChecker extends ProbModelChecker
 
 		// Special case: no target states
 		if (target.isEmpty()) {
-			BitSet soln = new BitSet(POMAS.getNumStates());
-			soln.set(0, POMAS.getNumStates());
+			BitSet soln = new BitSet(pomas.getNumStates());
+			soln.set(0, pomas.getNumStates());
 			return soln;
 		}
 
@@ -798,7 +798,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 		// prob0 = complement of 'canReachTarget'
 		result = new BitSet();
-		result.set(0, POMAS.getNumStates(), true);
+		result.set(0, pomas.getNumStates(), true);
 		result.andNot(canReachTarget);
 
 		// Finished precomputation
@@ -817,7 +817,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
 	 */
-	public BitSet prob0(POMAS POMAS, BitSet remain, BitSet target)
+	public BitSet prob0(POMAS pomas, BitSet remain, BitSet target)
 	{
 		int n, iters;
 		BitSet u, soln, unknown;
@@ -830,13 +830,13 @@ public class POMASModelChecker extends ProbModelChecker
 
 		// Special case: no target states
 		if (target.cardinality() == 0) {
-			soln = new BitSet(POMAS.getNumStates());
-			soln.set(0, POMAS.getNumStates());
+			soln = new BitSet(pomas.getNumStates());
+			soln.set(0, pomas.getNumStates());
 			return soln;
 		}
 
 		// Initialise vectors
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 		u = new BitSet(n);
 		soln = new BitSet(n);
 
@@ -857,7 +857,7 @@ public class POMASModelChecker extends ProbModelChecker
 		while (!u_done) {
 			iters++;
 			// Single step of Prob0
-			POMAS.prob0step(unknown, u, soln);
+			pomas.prob0step(unknown, u, soln);
 			// Check termination
 			u_done = soln.equals(u);
 			// u = soln
@@ -885,7 +885,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param pre The predecessor relation of the DTMC
 	 */
-	public BitSet prob1(POMAS POMAS, BitSet remain, BitSet target, PredecessorRelation pre) {
+	public BitSet prob1(POMAS pomas, BitSet remain, BitSet target, PredecessorRelation pre) {
 		// Implements the constrained reachability algorithm from
 		// Baier, Katoen: Principles of Model Checking (Corollary 10.31 Qualitative Constrained Reachability)
 		long timer;
@@ -904,7 +904,7 @@ public class POMASModelChecker extends ProbModelChecker
 		BitSet absorbing = new BitSet();
 		if (remain != null) {
 			// complement remain
-			absorbing.set(0, POMAS.getNumStates(), true);
+			absorbing.set(0, pomas.getNumStates(), true);
 			absorbing.andNot(remain);
 		} else {
 			// for remain == null, remain consists of all states
@@ -922,7 +922,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// complement canReachTarget
 		// S\Pre*(target)
 		BitSet canNotReachTarget = new BitSet();
-		canNotReachTarget.set(0, POMAS.getNumStates(), true);
+		canNotReachTarget.set(0, pomas.getNumStates(), true);
 		canNotReachTarget.andNot(canReachTarget);
 
 		// the set of states that can reach a canNotReachTarget state in M'
@@ -932,7 +932,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// complement probTargetNot1
 		// S\Pre*(S\Pre*(target))
 		BitSet result = new BitSet();
-		result.set(0, POMAS.getNumStates(), true);
+		result.set(0, pomas.getNumStates(), true);
 		result.andNot(probTargetNot1);
 
 		// Finished precomputation
@@ -951,7 +951,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
 	 */
-	public BitSet prob1(POMAS POMAS, BitSet remain, BitSet target)
+	public BitSet prob1(POMAS pomas, BitSet remain, BitSet target)
 	{
 		int n, iters;
 		BitSet u, v, soln, unknown;
@@ -964,11 +964,11 @@ public class POMASModelChecker extends ProbModelChecker
 
 		// Special case: no target states
 		if (target.cardinality() == 0) {
-			return new BitSet(POMAS.getNumStates());
+			return new BitSet(pomas.getNumStates());
 		}
 
 		// Initialise vectors
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 		u = new BitSet(n);
 		v = new BitSet(n);
 		soln = new BitSet(n);
@@ -996,7 +996,7 @@ public class POMASModelChecker extends ProbModelChecker
 			while (!v_done) {
 				iters++;
 				// Single step of Prob1
-				POMAS.prob1step(unknown, u, v, soln);
+				pomas.prob1step(unknown, u, v, soln);
 				// Check termination (inner)
 				v_done = soln.equals(v);
 				// v = soln
@@ -1028,7 +1028,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.  
 	 */
-	protected ModelCheckerResult computeReachProbsValIter(POMAS POMAS, BitSet no, BitSet yes, double init[], BitSet known) throws PrismException
+	protected ModelCheckerResult computeReachProbsValIter(POMAS pomas, BitSet no, BitSet yes, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res;
 		BitSet unknown;
@@ -1042,7 +1042,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("Starting value iteration...");
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create solution vector(s)
 		soln = new double[n];
@@ -1102,7 +1102,7 @@ public class POMASModelChecker extends ProbModelChecker
 		while (!done && iters < maxIters) {
 			iters++;
 			// Matrix-vector multiply
-			POMAS.mvMult(soln, soln2, unknown, false);
+			pomas.mvMult(soln, soln2, unknown, false);
 			// Check termination
 			done = PrismUtils.doublesAreClose(soln, soln2, termCritParam, termCrit == TermCrit.ABSOLUTE);
 			// Swap vectors for next iter
@@ -1143,7 +1143,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.  
 	 */
-	protected ModelCheckerResult computeReachProbsGaussSeidel(POMAS POMAS, BitSet no, BitSet yes, double init[], BitSet known) throws PrismException
+	protected ModelCheckerResult computeReachProbsGaussSeidel(POMAS pomas, BitSet no, BitSet yes, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res;
 		BitSet unknown;
@@ -1159,7 +1159,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("Starting Gauss-Seidel...");
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create solution vector
 		//soln = (init == null) ? new ProbTraceList[n] : init;
@@ -1218,7 +1218,7 @@ public class POMASModelChecker extends ProbModelChecker
 			iters++;
 			// Matrix-vector multiply
 			//maxDiff = POMAS.mvLabeledMultGS(soln, unknown, false, termCrit == TermCrit.ABSOLUTE);
-			maxDiff = POMAS.mvMultGS(soln, unknown, false, termCrit == TermCrit.ABSOLUTE);
+			maxDiff = pomas.mvMultGS(soln, unknown, false, termCrit == TermCrit.ABSOLUTE);
 			// Check termination
 			done = maxDiff < termCritParam;
 		}
@@ -1254,9 +1254,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(POMAS POMAS, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(POMAS pomas, BitSet target, int k) throws PrismException
 	{
-		return computeBoundedReachProbs(POMAS, null, target, k, null, null);
+		return computeBoundedReachProbs(pomas, null, target, k, null, null);
 	}
 
 	/**
@@ -1268,9 +1268,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param target Target states
 	 * @param k Bound
 	 */
-	public ModelCheckerResult computeBoundedUntilProbs(POMAS POMAS, BitSet remain, BitSet target, int k) throws PrismException
+	public ModelCheckerResult computeBoundedUntilProbs(POMAS pomas, BitSet remain, BitSet target, int k) throws PrismException
 	{
-		return computeBoundedReachProbs(POMAS, remain, target, k, null, null);
+		return computeBoundedReachProbs(pomas, remain, target, k, null, null);
 	}
 
 	/**
@@ -1284,7 +1284,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param init Initial solution vector - pass null for default
 	 * @param results Optional array of size b+1 to store (init state) results for each step (null if unused)
 	 */
-	public ModelCheckerResult computeBoundedReachProbs(POMAS POMAS, BitSet remain, BitSet target, int k, double init[], double results[]) throws PrismException
+	public ModelCheckerResult computeBoundedReachProbs(POMAS pomas, BitSet remain, BitSet target, int k, double init[], double results[]) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet unknown;
@@ -1297,7 +1297,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("\nStarting bounded probabilistic reachability...");
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create solution vector(s)
 		soln = new double[n];
@@ -1315,7 +1315,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// (compute min/max value over initial states for first step)
 		if (results != null) {
 			// TODO: whether this is min or max should be specified somehow
-			results[0] = Utils.minMaxOverArraySubset(soln2, POMAS.getInitialStates(), true);
+			results[0] = Utils.minMaxOverArraySubset(soln2, pomas.getInitialStates(), true);
 		}
 
 		// Determine set of states actually need to perform computation for
@@ -1331,12 +1331,12 @@ public class POMASModelChecker extends ProbModelChecker
 
 			iters++;
 			// Matrix-vector multiply
-			POMAS.mvMult(soln, soln2, unknown, false);
+			pomas.mvMult(soln, soln2, unknown, false);
 			// Store intermediate results if required
 			// (compute min/max value over initial states for this step)
 			if (results != null) {
 				// TODO: whether this is min or max should be specified somehow
-				results[iters] = Utils.minMaxOverArraySubset(soln2, POMAS.getInitialStates(), true);
+				results[iters] = Utils.minMaxOverArraySubset(soln2, pomas.getInitialStates(), true);
 			}
 			// Swap vectors for next iter
 			tmpsoln = soln;
@@ -1365,9 +1365,9 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param mcRewards The rewards
 	 * @param target Target states
 	 */
-	public ModelCheckerResult computeReachRewards(POMAS POMAS, MCRewards mcRewards, BitSet target) throws PrismException
+	public ModelCheckerResult computeReachRewards(POMAS pomas, MCRewards mcRewards, BitSet target) throws PrismException
 	{
-		return computeReachRewards(POMAS, mcRewards, target, null, null);
+		return computeReachRewards(pomas, mcRewards, target, null, null);
 	}
 
 	/**
@@ -1379,7 +1379,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.  
 	 */
-	public ModelCheckerResult computeReachRewards(POMAS POMAS, MCRewards mcRewards, BitSet target, double init[], BitSet known) throws PrismException
+	public ModelCheckerResult computeReachRewards(POMAS pomas, MCRewards mcRewards, BitSet target, double init[], BitSet known) throws PrismException
 	{
 		ModelCheckerResult res = null;
 		BitSet inf;
@@ -1399,10 +1399,10 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("\nStarting expected reachability...");
 
 		// Check for deadlocks in non-target state (because breaks e.g. prob1)
-		POMAS.checkForDeadlocks(target);
+		pomas.checkForDeadlocks(target);
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Optimise by enlarging target set (if more info is available)
 		if (init != null && known != null && !known.isEmpty()) {
@@ -1417,7 +1417,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 		// Precomputation (not optional)
 		timerProb1 = System.currentTimeMillis();
-		inf = prob1(POMAS, null, target);
+		inf = prob1(pomas, null, target);
 		inf.flip(0, n);
 		timerProb1 = System.currentTimeMillis() - timerProb1;
 
@@ -1429,7 +1429,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// Compute rewards
 		switch (linEqMethod) {
 		case POWER:
-			res = computeReachRewardsValIter(POMAS, mcRewards, target, inf, init, known);
+			res = computeReachRewardsValIter(pomas, mcRewards, target, inf, init, known);
 			break;
 		default:
 			throw new PrismException("Unknown linear equation solution method " + linEqMethod.fullName());
@@ -1456,7 +1456,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param known Optionally, a set of states for which the exact answer is known
 	 * Note: if 'known' is specified (i.e. is non-null, 'init' must also be given and is used for the exact values.
 	 */
-	protected ModelCheckerResult computeReachRewardsValIter(POMAS POMAS, MCRewards mcRewards, BitSet target, BitSet inf, double init[], BitSet known)
+	protected ModelCheckerResult computeReachRewardsValIter(POMAS pomas, MCRewards mcRewards, BitSet target, BitSet inf, double init[], BitSet known)
 			throws PrismException
 	{
 		ModelCheckerResult res;
@@ -1471,7 +1471,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("Starting value iteration...");
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create solution vector(s)
 		soln = new double[n];
@@ -1507,7 +1507,7 @@ public class POMASModelChecker extends ProbModelChecker
 			//mainLog.println(soln);
 			iters++;
 			// Matrix-vector multiply
-			POMAS.mvMultRew(soln, mcRewards, soln2, unknown, false);
+			pomas.mvMultRew(soln, mcRewards, soln2, unknown, false);
 			// Check termination
 			done = PrismUtils.doublesAreClose(soln, soln2, termCritParam, termCrit == TermCrit.ABSOLUTE);
 			// Swap vectors for next iter
@@ -1545,7 +1545,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param initDist Initial distribution (will be overwritten)
 	 */
-	public ModelCheckerResult computeSteadyStateProbs(POMAS POMAS, double initDist[]) throws PrismException
+	public ModelCheckerResult computeSteadyStateProbs(POMAS pomas, double initDist[]) throws PrismException
 	{
 		ModelCheckerResult res;
 		BitSet startNot, bscc;
@@ -1556,12 +1556,12 @@ public class POMASModelChecker extends ProbModelChecker
 		timer = System.currentTimeMillis();
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 		// Create results vector
 		solnProbs = new double[n];
 
 		// Compute bottom strongly connected components (BSCCs)
-		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, POMAS);
+		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, pomas);
 		sccComputer.computeBSCCs();
 		List<BitSet> bsccs = sccComputer.getBSCCs();
 		BitSet notInBSCCs = sccComputer.getNotInBSCCs();
@@ -1587,7 +1587,7 @@ public class POMASModelChecker extends ProbModelChecker
 		if (allInOneBSCC != -1) {
 			mainLog.println("\nInitial states all in one BSCC (so no reachability probabilities computed)");
 			bscc = bsccs.get(allInOneBSCC);
-			computeSteadyStateProbsForBSCC(POMAS, bscc, solnProbs);
+			computeSteadyStateProbsForBSCC(pomas, bscc, solnProbs);
 		}
 
 		// Otherwise, have to consider all the BSCCs
@@ -1599,7 +1599,7 @@ public class POMASModelChecker extends ProbModelChecker
 				mainLog.println("\nComputing probability of reaching BSCC " + (b + 1));
 				bscc = bsccs.get(b);
 				// Compute probabilities
-				reachProbs = computeUntilProbs(POMAS, notInBSCCs, bscc).soln;
+				reachProbs = computeUntilProbs(pomas, notInBSCCs, bscc).soln;
 				// Compute probability of reaching BSCC, which is dot product of
 				// vectors for initial distribution and probabilities of reaching it
 				probBSCCs[b] = 0.0;
@@ -1614,7 +1614,7 @@ public class POMASModelChecker extends ProbModelChecker
 				mainLog.println("\nComputing steady-state probabilities for BSCC " + (b + 1));
 				bscc = bsccs.get(b);
 				// Compute steady-state probabilities for the BSCC
-				computeSteadyStateProbsForBSCC(POMAS, bscc, solnProbs);
+				computeSteadyStateProbsForBSCC(pomas, bscc, solnProbs);
 				// Multiply by BSCC reach prob
 				for (int i = bscc.nextSetBit(0); i >= 0; i = bscc.nextSetBit(i + 1))
 					solnProbs[i] *= probBSCCs[b];
@@ -1638,7 +1638,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param POMAS The POMAS
 	 * @param multProbs Multiplication vector (optional: null means all 1s)
 	 */
-	public ModelCheckerResult computeSteadyStateBackwardsProbs(POMAS POMAS, double multProbs[]) throws PrismException
+	public ModelCheckerResult computeSteadyStateBackwardsProbs(POMAS pomas, double multProbs[]) throws PrismException
 	{
 		ModelCheckerResult res;
 		BitSet bscc;
@@ -1649,10 +1649,10 @@ public class POMASModelChecker extends ProbModelChecker
 		timer = System.currentTimeMillis();
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Compute bottom strongly connected components (BSCCs)
-		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, POMAS);
+		SCCComputer sccComputer = SCCComputer.createSCCComputer(this, pomas);
 		sccComputer.computeBSCCs();
 		List<BitSet> bsccs = sccComputer.getBSCCs();
 		BitSet notInBSCCs = sccComputer.getNotInBSCCs();
@@ -1665,7 +1665,7 @@ public class POMASModelChecker extends ProbModelChecker
 			mainLog.println("\nComputing steady state probabilities for BSCC " + (b + 1));
 			bscc = bsccs.get(b);
 			// Compute steady-state probabilities for the BSCC
-			computeSteadyStateProbsForBSCC(POMAS, bscc, ssProbs);
+			computeSteadyStateProbsForBSCC(pomas, bscc, ssProbs);
 			// Compute weighted sum of probabilities with multProbs
 			probBSCCs[b] = 0.0;
 			if (multProbs == null) {
@@ -1706,7 +1706,7 @@ public class POMASModelChecker extends ProbModelChecker
 				mainLog.println("\nComputing probabilities of reaching BSCC " + (b + 1));
 				bscc = bsccs.get(b);
 				// Compute probabilities
-				reachProbs = computeUntilProbs(POMAS, notInBSCCs, bscc).soln;
+				reachProbs = computeUntilProbs(pomas, notInBSCCs, bscc).soln;
 				// Multiply by value for BSCC, add to total
 				for (int i = 0; i < n; i++) {
 					soln[i] += reachProbs[i] * probBSCCs[b];
@@ -1733,7 +1733,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param bscc The BSCC to be analysed
 	 * @param result Storage for result (ignored if null)
 	 */
-	public ModelCheckerResult computeSteadyStateProbsForBSCC(POMAS POMAS, BitSet bscc, double result[]) throws PrismException
+	public ModelCheckerResult computeSteadyStateProbsForBSCC(POMAS pomas, BitSet bscc, double result[]) throws PrismException
 	{
 		ModelCheckerResult res;
 		int n, iters;
@@ -1746,7 +1746,7 @@ public class POMASModelChecker extends ProbModelChecker
 		mainLog.println("Starting value iteration...");
 
 		// Store num states
-		n = POMAS.getNumStates();
+		n = pomas.getNumStates();
 
 		// Create solution vector(s)
 		// Use the passed in vector, if present
@@ -1764,7 +1764,7 @@ public class POMASModelChecker extends ProbModelChecker
 		while (!done && iters < maxIters) {
 			iters++;
 			// Matrix-vector multiply
-			POMAS.vmMult(soln, soln2);
+			pomas.vmMult(soln, soln2);
 			// Check termination
 			done = PrismUtils.doublesAreClose(soln, soln2, termCritParam, termCrit == TermCrit.ABSOLUTE);
 			// Swap vectors for next iter
@@ -1803,7 +1803,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * @param k Time step
 	 * @param initDist Initial distribution (will be overwritten)
 	 */
-	public ModelCheckerResult computeTransientProbs(POMAS POMAS, int k, double initDist[]) throws PrismException
+	public ModelCheckerResult computeTransientProbs(POMAS pomas, int k, double initDist[]) throws PrismException
 	{
 		throw new PrismNotSupportedException("Not implemented yet");
 	}
@@ -1847,18 +1847,17 @@ public class POMASModelChecker extends ProbModelChecker
 				//    (example taken from p.14 of Lec 5 of http://www.prismmodelchecker.org/lectures/pmc/) 
 				mc = new POMASModelChecker(null);
 				pomas = new POMASSimple(6);
-				pomas.setProbability(0, 1, 0.1, "x0", "d", "d");
-				pomas.setProbability(0, 2, 0.9, "x0", "a", "");
-				pomas.setProbability(1, 0, 0.4, "x1", "b", "");
-				pomas.setProbability(1, 3, 0.6, "x1", "c", "c");
-				pomas.setProbability(2, 2, 0.1, "x2", "a", "");
-				pomas.setProbability(2, 3, 0.1, "x2", "c", "c");
-				pomas.setProbability(2, 4, 0.5, "x2", "b", "");
-				pomas.setProbability(2, 5, 0.3, "x2", "d", "d");
-				pomas.setProbability(3, 3, 1.0, "x2", "d", "d");
-				pomas.setProbability(4, 4, 1.0, "x3", "d", "d");
-				pomas.setProbability(5, 5, 0.3, "x3", "d", "d");
-				pomas.setProbability(5, 4, 0.7, "x3", "b", "");
+				pomas.setProbability(0, 1, 0.1, "x0", "x3", "d", "d");
+				pomas.setProbability(0, 2, 0.9, "x0", "x3", "a", "");
+				pomas.setProbability(1, 0, 0.4, "x1", "x3", "b", "");
+				pomas.setProbability(1, 3, 0.6, "x1", "x3", "c", "c");
+				pomas.setProbability(2, 2, 0.1, "x2","x3", "c", "c");
+				pomas.setProbability(2, 4, 0.5, "x2", "x3", "b", "");
+				pomas.setProbability(2, 5, 0.3, "x2", "x3", "d", "d");
+				pomas.setProbability(3, 3, 1.0, "x2", "x3", "d", "d");
+				pomas.setProbability(4, 4, 1.0, "x3", "x3", "d", "d");
+				pomas.setProbability(5, 5, 0.3, "x3", "x3", "d", "d");
+				pomas.setProbability(5, 4, 0.7, "x3", "x3", "b", "");
 				System.out.println(pomas);
 				BitSet target = new BitSet();
 				target.set(4);
