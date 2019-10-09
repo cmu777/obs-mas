@@ -599,7 +599,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		// Test whether this is a simple path formula (i.e. PCTL)
 		// and whether we want to use the corresponding algorithms
 		boolean useSimplePathAlgo = expr.isSimplePathFormula();
-		System.out.println("useSimplePathAlgo ....." + useSimplePathAlgo);
+		//System.out.println("useSimplePathAlgo ....." + useSimplePathAlgo);
 
 		if (useSimplePathAlgo &&
 		    settings.getBoolean(PrismSettings.PRISM_PATH_VIA_AUTOMATA) &&
@@ -630,7 +630,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
 		System.out.println("checking prob path formula simple ///// " + expr.toString());
 
-		System.out.println("@@@@@@@@@@@@@@@@@@@@ expr type: " + expr.getType());
+		//System.out.println("@@@@@@@@@@@@@@@@@@@@ expr type: " + expr.getType());
 		
 		// Negation
 		if (expr instanceof ExpressionUnaryOp &&
@@ -643,12 +643,13 @@ public class ProbModelChecker extends NonProbModelChecker
 
 		if (expr instanceof ExpressionTemporal) {
  			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
-			System.out.println("checking prob path formula simple 222 " + expr.toString());
+			System.out.println("checking prob path formula simple 222 " + expr.toString() + " is opacity: " + exprTemp.isOpacity());
 
 			
 			// Opacity
 			if (exprTemp.isOpacity()) {
 				System.out.println("checkProbPathFormulaSimple ....!!! " + expr.toString());
+				((POMASSimple) model).setObserver(exprTemp.getObserver());
 				probs = checkProbOpacity(model, exprTemp, minMax, statesOfInterest);
 			}
 			
@@ -690,7 +691,8 @@ public class ProbModelChecker extends NonProbModelChecker
 	protected StateValues checkProbOpacity(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Model check operands for all states
-		System.out.println("%%%%% checkProbOpacity.expr:" + expr.getOperand2().toString() + ": " + expr.getObserver());
+		//System.out.println("%%%%% checkProbOpacity.expr:" + expr.getOperand2().toString() 
+		//		+ ": " + expr.getObserver());
 		StateValues probsProp = new StateValues();
 		if (expr.getOperator() == ExpressionTemporal.P_X) {
 			probsProp  = checkProbNext(model, expr, minMax, statesOfInterest);

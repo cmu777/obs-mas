@@ -472,7 +472,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Compute opacity probabilities.
 	 * i.e. compute the probability of opacity of {@code target},
 	 * the probability of trace to target/obs^{-1}(obs(not target)).
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param target Target states
 	 */
 	public ModelCheckerResult computeOpacityProbs(POMAS pomas, StateValues probsProp, StateValues probsNegProp) throws PrismException
@@ -615,6 +615,7 @@ public class POMASModelChecker extends ProbModelChecker
 		// Start probabilistic reachability
 		timer = System.currentTimeMillis();
 		mainLog.println("\nStarting probabilistic reachability...");
+		
 
 		// Check for deadlocks in non-target state (because breaks e.g. prob1)
 		pomas.checkForDeadlocks(target);

@@ -53,7 +53,7 @@ public class ExpressionTemporal extends Expression
 	// Up to two operands (either may be null)
 	protected Expression operand1 = null; // LHS of operator
 	protected Expression operand2 = null; // RHS of operator
-	protected String observer = null;
+	protected static String observer = null;
 	// Optional (time) bounds
 	protected Expression lBound = null; // None if null, i.e. zero
 	protected Expression uBound = null; // None if null, i.e. infinity
@@ -62,7 +62,7 @@ public class ExpressionTemporal extends Expression
 	protected boolean uBoundStrict = false; // true: <, false: <=
 	// Display as =T rather than [T,T] ?
 	protected boolean equals = false;
-	protected boolean isOpacity = false;
+	protected static boolean isOpacity = false;
 
 	// Constructors
 
@@ -294,7 +294,7 @@ public class ExpressionTemporal extends Expression
 	public String toString()
 	{
 		String s = "";
-		if (observer !=null)
+		if ((observer !=null) & (op==P_O))
 			s += "<" + observer + "> ";
 		if (operand1 != null)
 			s += operand1 + " ";
@@ -406,8 +406,9 @@ public class ExpressionTemporal extends Expression
 			observer = observer.substring(1, observer.length()-1);
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
 			exprTemp = new ExpressionTemporal(op, op1, op2, observer);
+			exprTemp.setOpacity();
 			System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver()
-					+ " +++ "  + exprTemp.isOpacity());
+					+ " +++ opacity is "  + exprTemp.isOpacity());
 			return exprTemp.convertToUntilForm();
 		case P_F:
 			// F a == true U a

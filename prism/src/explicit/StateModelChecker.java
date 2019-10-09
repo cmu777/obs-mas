@@ -461,7 +461,7 @@ public class StateModelChecker extends PrismComponent
 		}
 		// Unary ops
 		else if (expr instanceof ExpressionUnaryOp) {
-			System.out.println("... instance of ExpressionUnaryOP...>>>>>");
+			//System.out.println("... instance of ExpressionUnaryOP...>>>>>");
 			res = checkExpressionUnaryOp(model, (ExpressionUnaryOp) expr, statesOfInterest);
 		}
 		// Functions

@@ -69,7 +69,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 	/** information about the agents, transition labels and their observations of this model */
 	//protected List<Observation> observationList;
 	protected List<Agent> agentList;
-	protected String observer;
+	protected static String observer;
 
 	//protected int numObservations;
 	protected int numAgents;
