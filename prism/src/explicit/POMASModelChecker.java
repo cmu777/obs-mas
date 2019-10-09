@@ -772,7 +772,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Prob0 precomputation algorithm (using predecessor relation),
 	 * i.e. determine the states of a POMAS which, with probability 0,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: {@code null} means "all states")
 	 * @param target Target states
 	 * @param pre The predecessor relation
@@ -814,7 +814,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Prob0 precomputation algorithm (using a fixed-point computation),
 	 * i.e. determine the states of a DTMC which, with probability 0,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
 	 */
@@ -948,7 +948,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Prob1 precomputation algorithm (using a fixed-point computation)
 	 * i.e. determine the states of a POMAS which, with probability 1,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: {@code null} means "all")
 	 * @param target Target states
 	 */
@@ -1022,7 +1022,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 	/**
 	 * Compute reachability probabilities using value iteration.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param no Probability 0 states
 	 * @param yes Probability 1 states
 	 * @param init Optionally, an initial solution vector (will be overwritten) 
@@ -1137,7 +1137,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 	/**
 	 * Compute reachability probabilities using Gauss-Seidel.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param no Probability 0 states
 	 * @param yes Probability 1 states
 	 * @param init Optionally, an initial solution vector (will be overwritten) 
@@ -1251,7 +1251,7 @@ public class POMASModelChecker extends ProbModelChecker
 	/**
 	 * Compute bounded reachability probabilities.
 	 * i.e. compute the probability of reaching a state in {@code target} within k steps.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param target Target states
 	 * @param k Bound
 	 */
@@ -1278,7 +1278,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * Compute bounded reachability/until probabilities.
 	 * i.e. compute the probability of reaching a state in {@code target},
 	 * within k steps, and while remaining in states in {@code remain}.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 * @param k Bound
@@ -1449,7 +1449,7 @@ public class POMASModelChecker extends ProbModelChecker
 
 	/**
 	 * Compute expected reachability rewards using value iteration.
-	 * @param POMAS The POMAS
+	 * @param pomas The POMAS
 	 * @param mcRewards The rewards
 	 * @param target Target states
 	 * @param inf States for which reward is infinite
