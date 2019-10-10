@@ -978,7 +978,6 @@ public abstract class Expression extends ASTElement
 				((ExpressionTemporal) expr).setOpacity();
 				String observer = exprTemp.getOperand1().toString();
 				((ExpressionTemporal) expr).setObserver(observer.substring(1, observer.length()-1));
-				System.out.println("$$$$$ " + ((ExpressionTemporal) expr).getObserver() + "$$$$$$$$");
 				expr = exprTemp.convertToUntilForm();
 			} else {
 				// other operators: convert

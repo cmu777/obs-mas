@@ -294,8 +294,8 @@ public class ExpressionTemporal extends Expression
 	public String toString()
 	{
 		String s = "";
-		if ((observer !=null) & (op==P_O))
-			s += "<" + observer + "> ";
+		//if ((observer !=null) & (op==P_O))
+		//	s += "<" + observer + "> ";
 		if (operand1 != null)
 			s += operand1 + " ";
 		s += opSymbols[op];
@@ -407,8 +407,8 @@ public class ExpressionTemporal extends Expression
 			op2 = ((ExpressionTemporal) operand2).getOperand2();
 			exprTemp = new ExpressionTemporal(op, op1, op2, observer);
 			exprTemp.setOpacity();
-			System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver()
-					+ " +++ opacity is "  + exprTemp.isOpacity());
+			//System.out.println("+++++ convertToUntilForm P_O ++++ " + exprTemp.getObserver()
+			//		+ " +++ opacity is "  + exprTemp.isOpacity());
 			return exprTemp.convertToUntilForm();
 		case P_F:
 			// F a == true U a

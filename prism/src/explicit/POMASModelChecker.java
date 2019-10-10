@@ -484,8 +484,8 @@ public class POMASModelChecker extends ProbModelChecker
 
 		timer = System.currentTimeMillis();
 
-		System.out.println("\n\n\nprobsProp !!! = " + probsProp.valuesL[0].toString());
-		System.out.println("probsNegProp !!! = " + probsNegProp.valuesL[0].toString());
+		//System.out.println("\n\n\nprobsProp !!! = " + probsProp.valuesL[0].toString());
+		//System.out.println("probsNegProp !!! = " + probsNegProp.valuesL[0].toString());
 
 		// Store num states
 		n = pomas.getNumStates();
@@ -501,10 +501,8 @@ public class POMASModelChecker extends ProbModelChecker
 			for (int j=0; j<traces.size(); j++) {
 				ProbTransLabel t = traces.get(j);
 				boolean find = false;
-				System.out.println("\nt....££££££" + t.getObservation().toString());
 				for (int k=0; k<negTraces.size(); k++) {
 					ProbTransLabel t1 = negTraces.get(k);
-					System.out.println("££££££....t1...." + t1.getObservation().toString());
 					//if (t.getValue() > 0.0 & t1.getValue() > 0.0 & t.getObservation().equals(t1.getObservation()) )  {
 					if (t.getValue() > 0.0 & t1.getValue() > 0.0 & 
 							Pattern.matches(t1.getObservation(), t.getObservation()) )  {
@@ -700,7 +698,7 @@ public class POMASModelChecker extends ProbModelChecker
 		if (known != null)
 			unknown.andNot(known);
 
-		System.out.println("Unknown :: " + unknown.toString());
+		//System.out.println("Unknown :: " + unknown.toString());
 		// Compute probabilistic labeled traces for satisfying states
 		computeTraces(pomas, remain, unknown, target, pre, n, res.solnWithLabels);
 
@@ -713,9 +711,9 @@ public class POMASModelChecker extends ProbModelChecker
 		res.timeProb0 = timerProb0 / 1000.0;
 		res.timePre = (timerProb0 + timerProb1) / 1000.0;
 		
-		System.out.println("\n!!!!!!!!!!!! + res.soln = " + res.soln[0]
-				+ ", res.solnWithLabels = " + res.solnWithLabels[0].getProb() 
-				+ ":" + res.solnWithLabels[0].getTraceList().toString());
+		//System.out.println("\n!!!!!!!!!!!! + res.soln = " + res.soln[0]
+		//		+ ", res.solnWithLabels = " + res.solnWithLabels[0].getProb() 
+		//		+ ":" + res.solnWithLabels[0].getTraceList().toString());
 		
 		
 		////////////////////////////////////////////////////
@@ -729,9 +727,9 @@ public class POMASModelChecker extends ProbModelChecker
 		res.solnDeadlocks = new ProbTraceList[n];
 		// Compute probabilistic labeled traces for all terminating states
 		computeTraces(pomas, remain, unknown, deadlocks, pre, n, res.solnDeadlocks);
-		System.out.println("\n!!!!!!!!!!!! + res.solnDeadlocks = " 
-					+ res.solnWithLabels[0].getProb() 
-					+ ":" + res.solnDeadlocks[0].getTraceList().toString());
+		//System.out.println("\n!!!!!!!!!!!! + res.solnDeadlocks = " 
+		//			+ res.solnWithLabels[0].getProb() 
+		//			+ ":" + res.solnDeadlocks[0].getTraceList().toString());
 		
 		return res;
 	}
@@ -751,11 +749,12 @@ public class POMASModelChecker extends ProbModelChecker
 	public void computeTraces(POMAS pomas, BitSet remain, BitSet unknown, BitSet target, 
 			PredecessorRelation pre, int n, ProbTraceList[] soln)
 	{
+		String observer =  ((POMASSimple)pomas).getObserver();
 		for (int s : new IterableStateSet(unknown, n, false)) {
 			ArrayList<ProbTransLabel> traces = new ArrayList<ProbTransLabel>();
 			for (int t : new IterableStateSet(target, n, false)) {
 				ProbTraceList visited = new ProbTraceList(n);
-				ProbTransLabel tl = new ProbTransLabel("", "", "", "", 0.0);
+				ProbTransLabel tl = new ProbTransLabel("", observer, "", "", 0.0);
 				BitSet tmpTarget = new BitSet();
 				tmpTarget.set(t);
 				BitSet canReachTarget = pre.calculatePreStar(remain, tmpTarget, tmpTarget);

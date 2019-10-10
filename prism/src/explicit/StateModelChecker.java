@@ -412,9 +412,9 @@ public class StateModelChecker extends PrismComponent
 		timer = System.currentTimeMillis();
 		//System.out.println("Model checking starting at... " + timer);
 		// check expression for all states (null => statesOfInterest=all)
-		System.out.println("1111111 " + expr.toString());
+		//System.out.println("1111111 " + expr.toString());
 		vals = checkExpression(model, expr, null);
-		System.out.println("222222 " + expr.toString());
+		//System.out.println("222222 " + expr.toString());
 		timer = System.currentTimeMillis() - timer;
 		mainLog.println("\nTime for model checking: " + timer / 1000.0 + " seconds.");
 
@@ -447,7 +447,7 @@ public class StateModelChecker extends PrismComponent
 		StateValues res = null;
 		
 
-		System.out.println("checking exprssion expr..." + expr.toString());
+		//System.out.println("checking exprssion expr..." + expr.toString());
 
 		// If-then-else
 		if (expr instanceof ExpressionITE) {

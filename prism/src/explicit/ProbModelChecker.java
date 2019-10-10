@@ -468,17 +468,17 @@ public class ProbModelChecker extends NonProbModelChecker
 	{
 		StateValues res;
 
-		System.out.println("ProbModelChecker checkExpression ****");
+		//System.out.println("ProbModelChecker checkExpression ****");
 		
 		// <<>> or [[]] operator
 		if (expr instanceof ExpressionStrategy) {
-			System.out.println("!!! >>>>> instance of ExpressionStrategy, expr = " + expr.toString());
+			//System.out.println("!!! >>>>> instance of ExpressionStrategy, expr = " + expr.toString());
 			res = checkExpressionStrategy(model, (ExpressionStrategy) expr, statesOfInterest);
 			
 		}
 		// P operator
 		else if (expr instanceof ExpressionProb) {
-			System.out.println("!!! >>>>> instance of ExpressionProb expr = " + expr.toString());
+			//System.out.println("!!! >>>>> instance of ExpressionProb expr = " + expr.toString());
 			res = checkExpressionProb(model, (ExpressionProb) expr, statesOfInterest);
 		}
 		// R operator
@@ -491,7 +491,7 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 		// Otherwise, use the superclass
 		else {
-			System.out.println("!!! >>>>> use the superclass, expr = " + expr.toString());
+			//System.out.println("!!! >>>>> use the superclass, expr = " + expr.toString());
 			res = super.checkExpression(model, expr, statesOfInterest);
 		}
 
@@ -610,10 +610,10 @@ public class ProbModelChecker extends NonProbModelChecker
 		}
 
 		if (useSimplePathAlgo) {
-			System.out.println("check prob path formula simple ....." + expr.toString());
+			//System.out.println("check prob path formula simple ....." + expr.toString());
 			return checkProbPathFormulaSimple(model, expr, minMax, statesOfInterest);
 		} else {
-			System.out.println("check prob path formula LTL .....");
+			//System.out.println("check prob path formula LTL .....");
 			return checkProbPathFormulaLTL(model, expr, false, minMax, statesOfInterest);
 		}
 	}
@@ -626,11 +626,10 @@ public class ProbModelChecker extends NonProbModelChecker
 		boolean negated = false;
 		StateValues probs = null;
 
-		System.out.println("checking prob path formula simple |||| " + expr.toString());
+		//System.out.println("checking prob path formula simple |||| " + expr.toString());
 		expr = Expression.convertSimplePathFormulaToCanonicalForm(expr);
-		System.out.println("checking prob path formula simple ///// " + expr.toString());
+		//System.out.println("checking prob path formula simple ///// " + expr.toString());
 
-		//System.out.println("@@@@@@@@@@@@@@@@@@@@ expr type: " + expr.getType());
 		
 		// Negation
 		if (expr instanceof ExpressionUnaryOp &&
@@ -638,17 +637,17 @@ public class ProbModelChecker extends NonProbModelChecker
 			negated = true;
 			minMax = minMax.negate();
 			expr = ((ExpressionUnaryOp)expr).getOperand();
-			System.out.println("checking prob path formula simple 111 " + expr.toString());
+			//System.out.println("checking prob path formula simple 111 " + expr.toString());
 		}
 
 		if (expr instanceof ExpressionTemporal) {
  			ExpressionTemporal exprTemp = (ExpressionTemporal) expr;
-			System.out.println("checking prob path formula simple 222 " + expr.toString() + " is opacity: " + exprTemp.isOpacity());
+			//System.out.println("checking prob path formula simple 222 " + expr.toString() + " is opacity: " + exprTemp.isOpacity());
 
 			
 			// Opacity
 			if (exprTemp.isOpacity()) {
-				System.out.println("checkProbPathFormulaSimple ....!!! " + expr.toString());
+				//System.out.println("checkProbPathFormulaSimple ....!!! " + expr.toString());
 				((POMASSimple) model).setObserver(exprTemp.getObserver());
 				probs = checkProbOpacity(model, exprTemp, minMax, statesOfInterest);
 			}
@@ -691,8 +690,6 @@ public class ProbModelChecker extends NonProbModelChecker
 	protected StateValues checkProbOpacity(Model model, ExpressionTemporal expr, MinMax minMax, BitSet statesOfInterest) throws PrismException
 	{
 		// Model check operands for all states
-		//System.out.println("%%%%% checkProbOpacity.expr:" + expr.getOperand2().toString() 
-		//		+ ": " + expr.getObserver());
 		StateValues probsProp = new StateValues();
 		if (expr.getOperator() == ExpressionTemporal.P_X) {
 			probsProp  = checkProbNext(model, expr, minMax, statesOfInterest);
