@@ -1,0 +1,36 @@
+pomas
+
+//define the agents, transition label and its observation for each agent, null denotes hidden
+agents
+	x0: open0->open0, call01->call01, call02->call02, call03->call03, close0->close0, count0->count0, voting1->voting1, voting2->voting2, voting3->voting3, votedX1->votedX1, votedX2->votedX2, votedX3->votedX3, votedY1->votedY1, votedY2->votedY2, votedY3->votedY3, revoke1->revoke1, revoke2->revoke2, revoke3->revoke3, submit1->submit1, submit2->submit2, submit3->submit3;
+	x1: open0->open0, call01->call01, call02->call02, call03->call03, close0->close0, count0->count0, voting1->voting1, voting2->null, voting3->null, votedX1->votedX1, votedX2->null, votedX3->null, votedY1->votedY1, votedY2->null, votedY3->null, revoke1->revoke1, revoke2->null, revoke3->null, submit1->submit1, submit2->submit2, submit3->submit3;
+	x2: open0->open0, call01->call01, call02->call02, call03->call03, close0->close0, count0->count0, voting1->null, voting2->voting2, voting3->null, votedX1->null, votedX2->votedX2, votedX3->null, votedY1->null, votedY2->votedY2, votedY3->null, revoke1->null, revoke2->revoke2, revoke3->null, submit1->submit1, submit2->submit2, submit3->submit3;
+	x3: open0->open0, call01->call01, call02->call02, call03->call03, close0->close0, count0->count0, voting1->voting1, voting2->voting2, voting3->voting3, votedX1->votedX1, votedX2->votedX2, votedX3->votedX3, votedY1->votedY1, votedY2->votedY2, votedY3->votedY3, revoke1->revoke1, revoke2->revoke2, revoke3->revoke3, submit1->submit1, submit2->submit2, submit3->submit3;
+endagents
+
+
+module opac1
+        o: [0..1] init 0; //open
+        call: [0..3] init 0; //chair call 1,2,3
+	v1: [0..1] init 0; //voter1 voting
+        v2: [0..1] init 0; //voter2 voting
+        v3: [0..1] init 0; //voter3 voting
+	w1: [0..2] init 0; //1:voter1 voted X, 2: voter1 voted Y
+	w2: [0..2] init 0; //1:voter2 voted X, 2: voter3 voted Y
+	w3: [0..2] init 0; //1:voter3 voted X, 2: voter3 voted Y
+	sub1: [0..1] init 0; //voter1 submitted
+	sub2: [0..1] init 0; //voter2 submitted
+	sub3: [0..1] init 0; //voter3 submitted
+	cx: [0..3] init 0; //counter for X
+	cy: [0..3] init 0; //counter for Y
+
+        [] o=0  -> 1: x0: open0: o=1;
+
+        [] o=1 & call=0  -> 1: x1 : : (f'=1) & (s'=0)  + 1/8: x1: b: (f'=1) & (s'=2)
+                        + 1/4 : x1:c:(f'=1) & (s'=3) ;
+
+        [s2] s=2 -> 1: x2: c: (f'=2) & (s'=3);
+
+        [] s=3 -> true;
+
+endmodule
