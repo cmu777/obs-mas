@@ -1,9 +1,12 @@
 ldtmc
 
-//define the transition label and its observation, null denotes hidden
-observations
-	a->a, b->null, c->c, x->null
-endobservations
+//define the agents and their observation, null denotes hidden
+agents
+        x0: a->a, b->b, c->c;
+        x1: a->a, b->null, c->c;
+        x2: a->a, b->null, c->null;
+endagents
+
 
 label "terminating" = (t=1);
 

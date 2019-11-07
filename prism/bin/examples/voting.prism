@@ -9,28 +9,42 @@ agents
 endagents
 
 
-module opac1
+module voting
+
         o: [0..1] init 0; //open
         call: [0..3] init 0; //chair call 1,2,3
-	v1: [0..1] init 0; //voter1 voting
-        v2: [0..1] init 0; //voter2 voting
-        v3: [0..1] init 0; //voter3 voting
-	w1: [0..2] init 0; //1:voter1 voted X, 2: voter1 voted Y
-	w2: [0..2] init 0; //1:voter2 voted X, 2: voter3 voted Y
-	w3: [0..2] init 0; //1:voter3 voted X, 2: voter3 voted Y
+	v1: [0..3] init 0; //voter1 1:voting, 2:voted x, 3:voted y
+        v2: [0..3] init 0; //voter2 1:voting, 2:voted x, 3:voted y
+        v3: [0..3] init 0; //voter3 1:voting, 2:voted x, 3:voted y
 	sub1: [0..1] init 0; //voter1 submitted
 	sub2: [0..1] init 0; //voter2 submitted
 	sub3: [0..1] init 0; //voter3 submitted
 	cx: [0..3] init 0; //counter for X
 	cy: [0..3] init 0; //counter for Y
 
-        [] o=0  -> 1: x0: open0: o=1;
+        [] o=0 & call=0 & (sub1=0) & (sub2=0) & (sub3=0) & (v1=0) & (v2=0) & (v3=0) & (cx=0) & (cy=0) -> 1: x0: open0: (o'=1);
 
-        [] o=1 & call=0  -> 1: x1 : : (f'=1) & (s'=0)  + 1/8: x1: b: (f'=1) & (s'=2)
-                        + 1/4 : x1:c:(f'=1) & (s'=3) ;
+        [] o=1 & call=0  -> 1: x0 : call01: (call'=1) & (v1'=1);
 
-        [s2] s=2 -> 1: x2: c: (f'=2) & (s'=3);
+        [] call=1 & v1=1 & sub1=0 -> 1/4: x1: voting1: (v1'=v1) + 1/4: x1: votedX1: (v1'=2) & (cx'=cx+1) + 1/2: x1: votedY1: (v1'=3) & (cy'=cy+1);
 
-        [] s=3 -> true;
+        [] call=1 & v1=2 & sub1=0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=sub1) & (cx'=cx-1) + 3/4: x1: submit1: (sub1'=1);
+        [] call=1 & v1=3 & sub1=0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=sub1) & (cy'=cy-1) + 3/4: x1: submit1: (sub1'=1);
+        
+	[] call=1 & sub1=1 -> 1: x0: call02: (call'=2) & (v2'=1);
+	
+	[] call=2 & v2=1 & sub2=0 -> 1/3: x2: voting2: (v2'=v2) + 1/3: x2: votedX2: (v2'=2) & (cx'=cx+1) + 1/3: x2: votedY2: (v2'=3) & (cy'=cy+1);
+
+	[] call=2 & v2=2 & sub2=0 -> 1/4: x2: revoke2: (v2'=1) & (sub2'=sub2) & (cx'=cx-1) + 3/4: x2: submit2: (sub2'=1); 
+	[] call=2 & v2=3 & sub2=0 -> 1/4: x2: revoke2: (v2'=1) & (sub2'=sub2) & (cy'=cy-1) + 3/4: x2: submit2: (sub2'=1); 
+
+	[] call=2 & sub2=1 -> 1: x0: call03: (call'=3) & (v3'=1);	
+	
+	[] call=3 & v3=1 & sub3=0 -> 1/4: x3: voting3: (v3'=v3) + 1/2: x3: votedX3: (v3'=2) & (cx'=cx+1) + 1/4: x3: votedY3: (v3'=3) & (cy'=cy+1);
+
+	[] call=3 & v3=2 & sub3=0 -> 1/4: x3: revoke3: (v3'=1) & (sub3'=sub3) & (cx'=cx-1) + 3/4: x3: submit3: (sub3'=1); 
+	[] call=3 & v3=3 & sub3=0 -> 1/4: x3: revoke3: (v3'=1) & (sub3'=sub3) & (cy'=cy-1) + 3/4: x3: submit3: (sub3'=1); 
+
+	[] sub1=1 & sub2=1 & sub3=1 & o=1 -> 1: x0: close0: (o'=0) & (call'=0) & (v1'=0) & (v2'=0) & (v3'=0) ;
 
 endmodule
