@@ -414,14 +414,14 @@ public class StateValues implements StateVector
 	public void negProbTraceListValue()
 	{
 		ProbTraceList[] negValuesL = valuesDL.clone();
-		System.out.println("\nbefore removing ... " + negValuesL[0].getTraceList().toString());
+		//System.out.println("\nbefore removing ... " + negValuesL[0].getTraceList().toString());
 		for (int i=0; i<valuesDL.length; i++) {
 			if (negValuesL[i].getTraceList().size() > 0) {
 				negValuesL[i].removeTraceList(valuesL[i].getTraceList());
 				negValuesL[i].setProb(valuesL[i].getProb());
 			}
 		}
-		System.out.println("\nafter removing ... " + negValuesL[0].getTraceList().toString());
+		//System.out.println("\nafter removing ... " + negValuesL[0].getTraceList().toString());
 		valuesL = negValuesL.clone();
 	}
 

@@ -168,15 +168,15 @@ public class ProbTraceList extends ASTElement
 	public String toString()
 	{
 		String s  = "";
-		s += prob + ".{";
+		s += prob + ".{\n";
 		for (int i=0; i<traceList.size(); i++) {
 			s += traceList.get(i).getValue() + ":";
-			s += traceList.get(i).getAgent();
+			//s += traceList.get(i).getAgent();
 			s += traceList.get(i).getAction();
 			s += "->" + traceList.get(i).getObservation();
-			if (i < traceList.size()-1) s += ",";
+			if (i < traceList.size()-1) s += ",\n";
 		}
-		s += "}";
+		s += "\n}";
 		return s;
 	}
 

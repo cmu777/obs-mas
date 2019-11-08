@@ -121,8 +121,8 @@ public class ProbTransLabel extends ASTElement
 	{
 		String s  = "";
 		s += value + ":";
-		s += agent + ".";
-		s += observer;
+		//s += agent + ".";
+		//s += observer;
 		s += action;
 		s += "->" + observation;
 		return s;

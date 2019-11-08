@@ -586,7 +586,6 @@ public class PrismCL implements PrismModelListener
 			if (propertiesFilename != null) {
 				mainLog.print("\nParsing properties file \"" + propertiesFilename + "\"...\n");
 				propertiesFile = prism.parsePropertiesFile(modulesFile, new File(propertiesFilename));
-				mainLog.print("\n************ prismCL 444");
 			}
 			// if properties were given on command line...
 			else if (!propertyString.equals("")) {
