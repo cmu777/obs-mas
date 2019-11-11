@@ -69,7 +69,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 	/** information about the agents, transition labels and their observations of this model */
 	//protected List<Observation> observationList;
 	protected List<Agent> agentList;
-	protected static String observer;
+	protected String observer;
 
 	//protected int numObservations;
 	protected int numAgents;
@@ -669,7 +669,6 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 			if (selfloop) {
 				prob *= (Double) e.getValue().getValue();
 				agent += (String) e.getValue().getAgent();
-				//observer += (String) e.getValue().getObserver();
 				label += (String) e.getValue().getAction();
 				obslabel += getObservationByLabel((String) e.getValue().getObserver(), (String) e.getValue().getAction());
 				path.removeTransition(path.getTraceList().size()-1);
@@ -678,22 +677,19 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				selfloop = false;
 			}
 			else if (path.getWithCycle(s)) {
-				prob = path.getTransition(path.getStates().indexOf(s)).getValue() * (Double) e.getValue().getValue();
-				//prob *= (Double) e.getValue().getValue();
+				//prob = path.getTransition(path.getStates().indexOf(s)).getValue() * (Double) e.getValue().getValue();
+				prob *= (Double) e.getValue().getValue();
 				agent = path.getTransition(path.getStates().indexOf(s)).getAgent() 
 						+ (String) e.getValue().getAgent();
-				//observer = path.getTransition(path.getStates().indexOf(s)).getObserver() 
-				//		+ (String) e.getValue().getObserver();
 				label = path.getTransition(path.getStates().indexOf(s)).getAction() 
 						+ (String) e.getValue().getAction();
 				obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation() 
 						+ getObservationByLabel((String) e.getValue().getObserver(), (String) e.getValue().getAction());
-				System.out.println("22222222 prob = " + prob);
+				//System.out.println("22222222 prob = " + prob);
 			}
 			else {
 				prob = (Double) e.getValue().getValue();
 				agent = (String) e.getValue().getAgent();
-				//observer = (String) e.getValue().getObserver();
 				label = (String) e.getValue().getAction();
 				obslabel = getObservationByLabel(observer,label);
 				//System.out.println("33333");
@@ -718,30 +714,29 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				continue;
 			} 
 			else if ( (k==s) & (label.length()>0) ) {
-				//if (prob<1) prob = 1/(1-prob);
+				//self looping
+				if (prob<1) prob = 1/(1-prob);
 				obslabel = getObservationByLabel(observer, label);
 				label = "(" + label + ")*";
 				if ((obslabel != null) & (obslabel.length() > 0)) 
 					obslabel = "(" + obslabel + ")*";
 				else obslabel = "";
 				selfloop = true;
-				System.out.println("self looping ..." + observer + " : " + label + "->" + obslabel);
+				//System.out.println("self looping ..." + observer + " : " + label + "->" + obslabel);
 				continue;
 			}			
 			else if (path.getStates().contains(k)) {
-				System.out.println("cycle ... -- " + path.getStates().toString());
+				//System.out.println("cycle ... -- " + path.getStates().toString());
 				agent = label = obslabel = ""; prob = 1.0;
-				for (int i=path.getStates().indexOf(k);i<path.getStates().size(); i++) {
+				for (int i=path.getStates().indexOf(k); i<path.getStates().size(); i++) {
 					agent += path.getTransition(i).getAgent();
-					//observer += path.getTransition(i).getObserver();
 					label += path.getTransition(i).getAction();
 					obslabel += path.getTransition(i).getObservation();
 					prob *= path.getTransition(i).getValue();
-					//path.setCycle(path.getStates().get(i));
 					ProbTransLabel tmpTrans = new ProbTransLabel("", observer, "", "", prob);
 					path.setTransition(tmpTrans, i);
 					//System.out.println("cycle[" +path.getStates().get(i) + "] = " 
-					//		+ path.getWithCycle(path.getStates().get(i)));
+					//	+ path.getWithCycle(path.getStates().get(i)));
 				}
 				//if (prob<1) prob = 1/(1-prob);
 				if (label.length() > 0)
@@ -753,9 +748,8 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				path.setTransition(tmpTrans, path.getStates().indexOf(k));
 				// set the start state of the cycle as true, for future label replacement
 				path.setCycle(path.getStates().indexOf(k));
-				System.out.println("cycle :: " + label + " -> " + obslabel + ", PROB ＝ " + prob);
-				//System.out.println("cycle[" +k + "] = " + path.getWithCycle(k));
-				
+				//System.out.println("cycle :: " + label + " -> " + obslabel + ", PROB ＝ " + prob);
+				//System.out.println("cycle[" +k + "] = " + path.getWithCycle(k));				
 			}
 			else {
 			    //System.out.println("recursion ... ");
@@ -775,12 +769,11 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 			    		obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation() 
 			    				+ tl.getObservation();
 					//System.out.println("+++++ s with cycle:" + s + ":" + path.getWithCycle(s));
-					System.out.println("+++++" + label + "->" + obslabel + " w.p. " + prob);
+					//System.out.println("+++++" + label + "->" + obslabel + " w.p. " + prob);
 			    }
 			    else {
 				    prob *= tl.getValue();
 				    agent += tl.getAgent();
-				    //observer += tl.getObserver();
 			    	label += tl.getAction();
 					obslabel += tl.getObservation();
 					//System.out.println("==== s without cycle:" + s + ":" + path.getWithCycle(s));

@@ -759,7 +759,10 @@ public class POMASModelChecker extends ProbModelChecker
 				tmpTarget.set(t);
 				BitSet canReachTarget = pre.calculatePreStar(remain, tmpTarget, tmpTarget);
 				tl = pomas.computeProbLabeledTrace(s, tl, canReachTarget, t, visited);
-				if (tl.getValue() > 0.0) traces.add(tl);
+				if (tl.getValue() > 0.0) {
+					traces.add(tl);
+					System.out.println("Traces for: [" + s + ":" + t +"]" + tl.toString());
+				}
 			}
 			soln[s] = new ProbTraceList(traces);
 			soln[s].setTraceList(traces);
