@@ -104,6 +104,11 @@ public class ProbTraceList extends ASTElement
 		this.withCycle[s] = true;
 	}
 	
+	public void unsetCycle(int s)
+	{
+		this.withCycle[s] = false;
+	}
+	
 	// Set methods
 	
 	public void setTraceList(ArrayList<ProbTransLabel> tl)

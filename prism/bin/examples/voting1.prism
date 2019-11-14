@@ -1,0 +1,30 @@
+pomas
+
+//define the agents, transition label and its observation for each agent, null denotes hidden
+agents
+	x0: open0->open0, call01->call01, close0->close0, count0->count0, voting1->voting1, votedX1->votedX1, votedY1->votedY1, revoke1->revoke1, submit1->submit1;
+	x1: open0->open0, call01->call01, close0->close0, count0->count0, voting1->voting1, votedX1->votedX1, votedY1->votedY1, revoke1->revoke1, submit1->submit1;
+endagents
+
+
+module voting
+
+        o: [0..2] init 0; //0:init 1:open 2:close
+        call: [0..3] init 0; //chair call 1,2,3
+	v1: [0..3] init 0; //voter1 1:voting, 2:voted x, 3:voted y
+	sub1: [0..1] init 0; //voter1 submitted
+	cx: [0..3] init 0; //counter for X
+	cy: [0..3] init 0; //counter for Y
+
+        [] o=0 & call=0 & v1=0 & sub1=0 & cx=0 & cy=0 -> 1: x0: open0: (o'=1);
+
+        [] o=1 & call=0 & v1=0 & sub1=0 & cx=0 & cy=0 -> 1: x0 : call01: (call'=1) & (v1'=1);
+
+        [] o=1 & call=1 & v1=1 & sub1=0 & cx=0 & cy=0 -> 1/4: x1: voting1: (v1'=v1) + 1/4: x1: votedX1: (v1'=2) & (cx'=cx+1) + 1/2: x1: votedY1: (v1'=3) & (cy'=cy+1);
+
+        [] o=1 & call=1 & v1=2 & sub1=0 & cx>0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=0) & (cx'=cx-1) + 3/4: x1: submit1: (sub1'=1);
+        [] o=1 & call=1 & v1=3 & sub1=0 & cy>0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=0) & (cy'=cy-1) + 3/4: x1: submit1: (sub1'=1);
+        
+	[] o=1 & call=1 & sub1=1 -> 1: x0: close0: (o'=2);
+
+endmodule

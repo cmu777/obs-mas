@@ -686,6 +686,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation() 
 						+ getObservationByLabel((String) e.getValue().getObserver(), (String) e.getValue().getAction());
 				//System.out.println("22222222 prob = " + prob);
+				path.unsetCycle(path.getStates().indexOf(s));
 			}
 			else {
 				prob = (Double) e.getValue().getValue();
@@ -726,7 +727,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				continue;
 			}			
 			else if (path.getStates().contains(k)) {
-				//System.out.println("cycle ... -- " + path.getStates().toString());
+				System.out.println("cycle ... -- " + path.getStates().toString() + ", k = " +k);
 				agent = label = obslabel = ""; prob = 1.0;
 				for (int i=path.getStates().indexOf(k); i<path.getStates().size(); i++) {
 					agent += path.getTransition(i).getAgent();
@@ -748,8 +749,9 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 				path.setTransition(tmpTrans, path.getStates().indexOf(k));
 				// set the start state of the cycle as true, for future label replacement
 				path.setCycle(path.getStates().indexOf(k));
+				//path.setCycle(k);
 				//System.out.println("cycle :: " + label + " -> " + obslabel + ", PROB ＝ " + prob);
-				//System.out.println("cycle[" +k + "] = " + path.getWithCycle(k));				
+				//System.out.println("cycle[" + k + "] = " + path.getWithCycle(k));				
 			}
 			else {
 			    //System.out.println("recursion ... ");
@@ -757,7 +759,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 			    //System.out.println(" tl = " + tl.toString());
 			    // if s in a cycle (actually the start state of the cycle), 
 			    // use the label in the path instead of that of tl, 
-			    // set up the prob to be one (rather than the prob of the tranistion in the cycle)
+			    // set up the prob to be one (rather than the prob of the transition in the cycle)
 			    if (path.getWithCycle(s)) {
 			    		prob = 1.0;
 			    		agent = path.getTransition(path.getStates().indexOf(s)).getAgent() 
