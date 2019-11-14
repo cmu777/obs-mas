@@ -685,8 +685,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 						+ (String) e.getValue().getAction();
 				obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation() 
 						+ getObservationByLabel((String) e.getValue().getObserver(), (String) e.getValue().getAction());
-				//System.out.println("22222222 prob = " + prob);
-				path.unsetCycle(path.getStates().indexOf(s));
+				System.out.println("22222222 prob = " + prob);
 			}
 			else {
 				prob = (Double) e.getValue().getValue();
@@ -697,10 +696,10 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 			}
 			path.addTransition(prob, agent, observer, label, obslabel);
 
-			//System.out.println(">>>> s = " + s + ", target = " + target + ", k = " + k 
-			//		+ ", prob = " + prob + ", agent = " + agent 
-			//		+ ", observer = " + observer + ", label = " + label 
-			//		+ ", observation = " + obslabel); 
+			System.out.println("\n>>>> s = " + s + ", target = " + target + ", k = " + k 
+					+ ", prob = " + prob + ", agent = " + agent 
+					+ ", observer = " + observer + ", label = " + label 
+					+ ", observation = " + obslabel); 
 					// + ", subset = " + subset + ", visited = " + path.toString()
 					//+ ", visited states = " + path.getStates().toString());
 			
