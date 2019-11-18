@@ -19,6 +19,8 @@ public class ProbTraceList extends ASTElement
 	protected ArrayList<Integer> states;
 	// if the state is in a cycle
 	protected boolean[] withCycle;
+	// if the state is in a self loop
+	protected boolean[] selfLoop;
 	
 	public ProbTraceList(int n)
 	{
@@ -26,6 +28,7 @@ public class ProbTraceList extends ASTElement
 		traceList = new ArrayList<ProbTransLabel>();
 		states = new ArrayList<Integer>();
 		withCycle = new boolean[n];
+		selfLoop = new boolean[n];
 	}
 		
 	public ProbTraceList(ArrayList<ProbTransLabel> traceList, double prob)
@@ -76,6 +79,8 @@ public class ProbTraceList extends ASTElement
 			this.states.remove(i);
 		for (int i=0; i<withCycle.length; i++) 
 			this.withCycle[i] = false;
+		for (int i=0; i<selfLoop.length; i++) 
+			this.selfLoop[i] = false;
 	}
 	
 	public void removeTransition(int i)
@@ -107,6 +112,21 @@ public class ProbTraceList extends ASTElement
 	public void unsetCycle(int s)
 	{
 		this.withCycle[s] = false;
+	}
+	
+	public boolean getSelfLoop(int s)
+	{
+		return selfLoop[s];
+	}
+	
+	public void setSelfLoop(int s)
+	{
+		this.selfLoop[s] = true;
+	}
+	
+	public void unsetSelfLoop(int s)
+	{
+		this.selfLoop[s] = false;
 	}
 	
 	// Set methods

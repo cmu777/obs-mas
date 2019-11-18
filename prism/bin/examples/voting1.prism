@@ -17,11 +17,11 @@ module voting
 
         [] o=0  & v1=0 & sub1=0 & cx=0 & cy=0 -> 1: x0: open0: (o'=1) & (v1'=1);
 
-        [] o=1 & v1=1 & sub1=0 & cx=0 & cy=0 -> 1/4: x1: voting1: (v1'=v1) + 1/4: x1: votedX1: (v1'=2) & (cx'=cx+1) + 1/2: x1: votedY1: (v1'=3) & (cy'=cy+1);
+        [] o=1 & v1=1 & sub1=0 & cx=0 & cy=0 -> 1/4: x1: voting1: (v1'=v1) + 1/8: x1: votedX1: (v1'=2) & (cx'=cx+1) + 5/8: x1: votedY1: (v1'=3) & (cy'=cy+1);
 
         [] o=1 & v1=2 & sub1=0 & cx>0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=0) & (cx'=cx-1) + 3/4: x1: submit1: (sub1'=1);
         [] o=1 & v1=3 & sub1=0 & cy>0 -> 1/4: x1: revoke1: (v1'=1) & (sub1'=0) & (cy'=cy-1) + 3/4: x1: submit1: (sub1'=1);
         
-	[] o=1 & v1>1 & sub1=1 -> 1: x0: close0: (o'=2);
+	[] o=1 & v1>1 -> 1: x0: close0: (o'=2);
 
 endmodule
