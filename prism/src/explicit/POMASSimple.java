@@ -153,7 +153,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 		agentList = null;
 		observer = null;
 		numTransitions = dtmc.numTransitions;
-		numStates = dtmc.numStates;
+		//numStates = dtmc.numStates;
 	}
 
 	/**
@@ -651,8 +651,143 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 		return maxDiff;
 	}
 	
-
+	/**
+	 * Compute the trace of from state s reaching state target.
+	 * @param s The starting state
+	 * @param tl The probabilistic transition label
+	 *  @param subset The set of states can reach the target
+	 * @param target the target state
+	 * @param path 
+	 */
 	@Override
+	public ProbTransLabel computeProbLabeledTrace(int s, ProbTransLabel tl, BitSet subset, int target, 
+			ProbTraceList path, ArrayList<ProbTransLabel>  myTraces)
+	{
+		int k;
+		LDistribution distr;
+		double prob = 1.0;
+		String agent = "", observer = tl.getObserver(), label = "", obslabel = "";
+		boolean selfloop = false;
+
+		distr = trans.get(s);
+		path.addStates(s);
+		for (Map.Entry<Integer, ProbTransLabel> e : distr) {
+			k = (Integer) e.getKey();
+			int t = path.getStates().indexOf(k);
+			
+			if (selfloop) {
+			//if (path.getSelfLoop(s)) {
+				prob *= (Double) e.getValue().getValue();
+				agent = (String) e.getValue().getAgent();
+				label += (String) e.getValue().getAction();
+				obslabel += getObservationByLabel(observer, (String) e.getValue().getAction());
+				path.removeTransition(path.getTraceList().size()-1);
+				//selfloop = false;
+				//path.unsetSelfLoop(s);
+			}
+			else if (path.getWithCycle(s)) {
+				prob = path.getTransition(path.getStates().indexOf(s)).getValue() * (Double) e.getValue().getValue();
+				agent = (String) e.getValue().getAgent();
+				label = path.getTransition(path.getStates().indexOf(s)).getAction() + (String) e.getValue().getAction();
+				obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation() 
+						+ getObservationByLabel(observer, (String) e.getValue().getAction());
+				//path.unsetCycle(s);
+			}
+			else {
+				prob = (Double) e.getValue().getValue();
+				agent = (String) e.getValue().getAgent();
+				label = (String) e.getValue().getAction();
+				obslabel = getObservationByLabel(observer,label);
+			}
+			path.addTransition(prob, agent, observer, label, obslabel);
+			
+			// k is the terminating target 
+			if ((k==target) & ((k==s) & label.length()==0 )) {
+				tl = new ProbTransLabel(agent, observer, label, obslabel, prob);
+				//System.out.println("\n targeting... path = " + path.toString());
+				break;
+			}
+			else if ((!subset.get(k)) | ((k==s) & label.length()==0 )) {	
+				//System.out.println("continue ...  k=" + k + ", s = " + s + ", label = " + label);
+				//this transition cannot reach the target
+				path.removeTransition(path.getTraceList().size()-1);
+				continue;
+			} 
+			else if ( (k==s) & (label.length()>0) ) {
+				//self looping
+				if (prob<1) prob = 1/(1-prob);
+				obslabel = getObservationByLabel(observer, label);
+				label = "(" + label + ")*";
+				if ((obslabel != null) & (obslabel.length() > 0)) 
+					obslabel = "(" + obslabel + ")*";
+				else obslabel = "";
+				selfloop = true;
+				//path.setSelfLoop(path.getStates().indexOf(k));
+				path.addTransition(prob, agent, observer, label, obslabel);
+				continue;
+			}			
+			else if (path.getStates().contains(k) & (k!=target)) {
+				//cycle: TODO: cycle condition is not quite right
+				//System.out.println("cycle ... -- " + path.getStates().toString() + ", s = " + s + ", k = " +k);
+				agent = label = obslabel = ""; prob = 1.0;
+				for (int i=t; i<path.getStates().size(); i++) {
+					agent += path.getTransition(i).getAgent();
+					label += path.getTransition(i).getAction();
+					obslabel += path.getTransition(i).getObservation();
+					prob *= path.getTransition(i).getValue();
+				}
+				if (prob<1) prob = prob/(1-prob);
+				prob *= path.getTransition(t).getValue();
+				if (label.length() > 0)
+					label = "(" + label + ")*" + path.getTransition(t).getAction();;
+				if ((obslabel != null) & (obslabel.length() > 0)) 
+					obslabel = "(" + obslabel + ")*" + path.getTransition(t).getObservation();
+				else obslabel = "";
+				
+				//set up the start state of the cycle
+				path.getTransition(t).setAction(label);
+				path.getTransition(t).setObservation(obslabel);
+				path.getTransition(t).setValue(prob);
+				// set the start state of the cycle as true, for future label replacement
+				path.setCycle(path.getStates().indexOf(k));
+				path.removeTransition(s,k);
+				
+			}
+			else {
+			   // System.out.println("recursion ...  ");
+			    tl = computeProbLabeledTrace(k, tl, subset, target, path, myTraces);
+			    
+			    // if s in a cycle (actually the start state of the cycle), 
+			    // use the label in the path instead of that of tl, 
+			    // set up the prob to be one (rather than the prob of the transition in the cycle)
+			    if (path.getWithCycle(s)) {
+			    	    prob = 1.0;
+			    		agent = path.getTransition(path.getStates().indexOf(s)).getAgent() + tl.getAgent();
+			    		label = path.getTransition(path.getStates().indexOf(s)).getAction() + tl.getAction();
+			    		obslabel = path.getTransition(path.getStates().indexOf(s)).getObservation()  + tl.getObservation();
+			    }
+			    else {
+				    prob *= tl.getValue();
+				    agent += tl.getAgent();
+			    	label += tl.getAction();
+					obslabel += tl.getObservation();
+			    }
+			    tl.setAgent(agent);
+			    tl.setObserver(observer);
+			    tl.setAction(label);
+			    tl.setObservation(obslabel);
+			    tl.setValue(prob);
+			    tl.setFrom(s);
+			    tl.setTo(t);
+			}
+			tl.setFrom(s);
+			tl.setTo(target);
+			if (s==0 & tl.getValue()>0 & !myTraces.contains(tl)) myTraces.add(tl);
+		}
+		return tl;		
+	}
+	
+	/*@Override
 	public ProbTransLabel computeProbLabeledTrace(int s, ProbTransLabel tl, BitSet subset, int target, 
 			ProbTraceList path)
 	{
@@ -779,7 +914,7 @@ public class POMASSimple extends DTMCSimple implements POMASExplicit
 			}
 		}
 		return tl;		
-	}
+	}*/
 	
 	/*public ProbTransLabel computeProbLabeledTrace(int s, ProbTransLabel tl, BitSet subset, int target)
 	{

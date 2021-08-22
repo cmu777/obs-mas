@@ -73,8 +73,9 @@ public interface POMAS extends DTMC
 	 * @param tl The probabilistic trace (a set of transition labels) to the target
 	 * @param subset The set of states can reach the target
 	 * @param target The target state
+	 * @param myTraces 
 	 */
 	public ProbTransLabel computeProbLabeledTrace(int s, ProbTransLabel tl, BitSet subset, int target, 
-			ProbTraceList path);
+			ProbTraceList path, ArrayList<ProbTransLabel>  myTraces);
 
 }

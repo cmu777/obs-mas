@@ -515,7 +515,7 @@ public class POMASModelChecker extends ProbModelChecker
 			}
 			
 			if (opacTraces != null) {
-				//System.out.println("opacTrace...." + opacTrace.toString());
+				//System.out.println("opacTrace...." + opacTraces.toString());
 				solnWithLabels2[i].computeProb();
 				//System.out.println("solnWithLabels2[i]...." + solnWithLabels2[i].toString());
 			}
@@ -698,7 +698,7 @@ public class POMASModelChecker extends ProbModelChecker
 		if (known != null)
 			unknown.andNot(known);
 
-		//System.out.println("Unknown :: " + unknown.toString());
+		//System.out.println("£££££££££Target :: " + target.toString());
 		// Compute probabilistic labeled traces for satisfying states
 		computeTraces(pomas, remain, unknown, target, pre, n, res.solnWithLabels);
 
@@ -740,7 +740,7 @@ public class POMASModelChecker extends ProbModelChecker
 	 * while remaining in those in {@code remain}.
 	 * @param pomas The POMAS
 	 * @param remain Remain in these states (optional: null means "all")
-	 * @param unknownA set of states actually needed for computing
+	 * @param unknown A set of states actually needed for computing
 	 * @param target Target states
 	 * @param pre Predecessor relation
 	 * @param n The number of the states
@@ -751,22 +751,23 @@ public class POMASModelChecker extends ProbModelChecker
 	{
 		String observer =  ((POMASSimple)pomas).getObserver();
 		for (int s : new IterableStateSet(unknown, n, false)) {
-			ArrayList<ProbTransLabel> traces = new ArrayList<ProbTransLabel>();
+			ArrayList<ProbTransLabel>  myTraces = new ArrayList<ProbTransLabel>();
 			for (int t : new IterableStateSet(target, n, false)) {
 				ProbTraceList visited = new ProbTraceList(n);
 				ProbTransLabel tl = new ProbTransLabel("", observer, "", "", 0.0);
 				BitSet tmpTarget = new BitSet();
 				tmpTarget.set(t);
 				BitSet canReachTarget = pre.calculatePreStar(remain, tmpTarget, tmpTarget);
-				tl = pomas.computeProbLabeledTrace(s, tl, canReachTarget, t, visited);
-				if (tl.getValue() > 0.0) {
+				tl = pomas.computeProbLabeledTrace(s, tl, canReachTarget, t, visited, myTraces);
+				/*if (tl.getValue() > 0.0) {
 					traces.add(tl);
-					System.out.println("Traces for: [" + s + ":" + t +"]" + tl.toString());
-				}
+					//if (s==0)  System.out.println("Traces for: [" + s + ":" + t +"]" + tl.toString() + ", visited path = " + visited.toString());
+				}*/
 			}
-			soln[s] = new ProbTraceList(traces);
-			soln[s].setTraceList(traces);
+			soln[s] = new ProbTraceList(myTraces);
+			//if (s==0) System.out.println("\n soln.. my traces = " + soln[0].toString());
 		}		
+		
 	}
 
 
@@ -881,9 +882,9 @@ public class POMASModelChecker extends ProbModelChecker
 
 	/**
 	 * Prob1 precomputation algorithm (using predecessor relation),
-	 * i.e. determine the states of a DTMC which, with probability 1,
+	 * i.e. determine the states of a POMAS which, with probability 1,
 	 * reach a state in {@code target}, while remaining in those in {@code remain}.
-	 * @param dtmc The DTMC
+	 * @param dtmc The POMAS
 	 * @param remain Remain in these states (optional: null means "all")
 	 * @param target Target states
 	 * @param pre The predecessor relation of the DTMC

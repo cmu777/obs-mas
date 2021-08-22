@@ -127,6 +127,7 @@ public class LDistribution implements Iterable<Entry<Integer, ProbTransLabel>>
 			return false;
 		} else {
 			probLabel.setValue(prob+probLabel.getValue());
+			set(j,probLabel);
 			return true;
 		}
 	}

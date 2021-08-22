@@ -82,7 +82,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 		}
 	}
 
-	public Distribution(LDistribution ldistr)
+	/*public Distribution(LDistribution ldistr)
 	{
 		this();
 		Iterator<Entry<Integer, ProbTransLabel>> i = ldistr.iterator();
@@ -90,7 +90,7 @@ public class Distribution implements Iterable<Entry<Integer, Double>>
 			Map.Entry<Integer, ProbTransLabel> e = i.next();
 			add(e.getKey(), e.getValue().getValue());
 		}
-	}
+	}*/
 
 	/**
 	 * Clear all entries of the distribution.
