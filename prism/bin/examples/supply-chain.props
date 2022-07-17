@@ -1,0 +1,6 @@
+
+//P=? [ F (dlv=1 & dec=2)]
+//P=? [ <customer> O F (dec!=1 & dlv=1)]
+P=? [ <sup1> O F (dec!=1 & dlv=1)]
+//P=? [ F (dec!=1 & dlv=1)]
+//P=? [ <sup1> O F (dlv=1)]
