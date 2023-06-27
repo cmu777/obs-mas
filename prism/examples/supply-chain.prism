@@ -1,0 +1,34 @@
+pomas
+
+//define the agents, transition label and its observation for each agent, null denotes hidden
+agents
+	customer: Ordc->Ordc, Ordr->null, Req1->null, Res1->null, Req2->null, Res2->null, Decision1->null, Decision2->null, Delivery->Dlv;
+	retailer: Ordc->Ordc, Ordr->Rrdr, Req1->null, Res1->null, Req2->null, Res2->null, Decision1->Dec1, Decision2->Dec2, Delivery->Dlv;
+	coord: Ordc->Ordc, Ordr->Ordr, Req1->Req1, Res1->Res1, Req2->Req2, Res2->Res2, Decision1->Dec1, Decision2->Dec2,  Delivery->Dlv;
+	sup1: Ordc->null, Ordr->Ordr, Req1->Req, Res1->Res, Req2->Req, Res2->Res, Decision1->Dec1, Decision2->Dec, Delivery->Dlv;
+	sup2: Ordc->null, Ordr->Ordr, Req1->Req, Res1->Res, Req2->Req, Res2->Res, Decision1->Dec, Decision2->Dec2, Delivery->Dlv;
+	sup3: Ordc->null, Ordr->Ordr, Req1->Req, Res1->Res, Req2->Req, Res2->Res, Req3->Req, Res3->Res, Decision1->Dec, Decision2->Dec, Decision3->Dec3, Delivery->Dlv;
+
+endagents
+
+
+module supply_chain
+
+        custOrd: [0..1] init 0; //0:no customer order, 1:the customer place an order
+	retOrd: [0..1] init 0; //0:no retailer order, 1:the retailer place an order
+        dec: [0..2] init 0; //1:the coordinator choose sup1 as the supplier,2:the coordinator choose sup2 as the supplier
+        dlv: [0..1] init 0; //0:not delivered to the custormer,1:delivered to the customer
+	req: [0..2] init 0; //1:the coordinator request sup1 for supplement, 2:the coordinator request sup2 for supplement 
+	res1: [0..1] init 0; //1:sup1 positive response to coordinator's request
+	res2: [0..1] init 0; //1:sup2 positive response to coordinator's request
+
+        [] (custOrd=0) & (dlv=0) -> 1:customer:Ordc:(custOrd'=1) + 0:customer:Ordc:(custOrd'=custOrd);
+	[] (custOrd=1) & (dlv=0) & (retOrd=0) -> 1:retailer:Ordr:(retOrd'=1);
+	[] (retOrd=1) & (dlv=0) & (req=0) -> 1/2:coord:Req1:(req'=1) + 1/2:coord:Req2:(req'=2);  
+	[] (req=1) & (res1=0) -> 1/2:sup1:Res1:(res1'=1) + 1/2:sup1:Res1:(res1'=-1);
+	[] (req=2) & (res2=0) -> 1/2:sup2:Res2:(res2'=1) + 1/2:sup2:Res2:(res2'=-1);
+	[] (res1>res2) & (dec=0) -> 1:coord:Decision1:(dec'=1);
+	[] (res2>res1) & (dec=0) -> 1:coord:Decision2:(dec'=2);
+	[] (res1=1) & (res2=1) & (dec=0) -> 1/2:coord:Decision1:(dec'=1) + 1/2:coord:Decision2:(dec'=2);
+	[] (dec>0) & (dlv=0) -> 1:retailer:Delivery:(dlv'=1);
+endmodule

@@ -1,22 +1,22 @@
-ldtmc
+pomas
 
-//define the transition label and its observation, null denotes hidden
-observations
-	a->a, b->null, c->c, x->null
-endobservations
+//define the agents, transition label and its observation for each agent, null denotes hidden
+agents
+	x0: a->a, b->b, c->c, x->x;
+	x1: a->a, b->null, c->c, x->null;
+	x2: a->a, b->null, c->c, x->null;
+endagents
 
-label "terminating" = (t=1);
 
 module opac1
+        s: [0..5] init 0;
+	t: [0..1] init 0;
 
-	s : [0..5] init 0;
-	t : [0..1] init 0; // t=1 denote terminate state
-
-	[] (s=0)&(t=0) -> 5/8:x:(s'=s)&(t'=1) + 1/4:b:(s'=1) + 1/8:c:(s'=4);
-	[] (s=1)&(t=0) -> 3/4:x:(s'=s)&(t'=1) + 1/4:c:(s'=2);
-	[] (s=2)&(t=0) -> 5/6:x:(s'=s)&(t'=1) + 1/6:a:(s'=3);
-	[] (s=3)&(t=0) -> 1:x:(s'=s)&(t'=1);
-	[] (s=4)&(t=0) -> 7/8:x:(s'=s)&(t'=1) + 1/8:a:(s'=5);
-	[] (s=5)&(t=0) -> 1/2:x:(s'=s)&(t'=1) + 1/2:b:(s'=s);
+	[] (s=0)&(t=0) -> 5/8:x0:x:(s'=s)&(t'=1) + 1/4:x0:b:(s'=1) + 1/8:x0:c:(s'=4);
+        [] (s=1)&(t=0) -> 3/4:x1:x:(s'=s)&(t'=1) + 1/4:x1:c:(s'=2);
+        [] (s=2)&(t=0) -> 5/6:x2:x:(s'=s)&(t'=1) + 1/6:x2:a:(s'=3);
+        [] (s=3)&(t=0) -> 1:x1:x:(s'=s)&(t'=1);
+        [] (s=4)&(t=0) -> 7/8:x2:x:(s'=s)&(t'=1) + 1/8:x2:a:(s'=5);
+        [] (s=5)&(t=0) -> 1/2:x0:x:(s'=s)&(t'=1) + 1/2:x0:b:(s'=s);
 
 endmodule
